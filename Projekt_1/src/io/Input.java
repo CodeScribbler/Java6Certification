@@ -3,11 +3,11 @@ package io;
 import util.IOTools;
 import model.Person;
 
-public class Eingabe {
+public class Input {
 
-    private Eingabe() {}
+    private Input() {}
 
-    public static Person liesPerson() {
+    public static Person createPerson() {
 
         String tmpStr;
 
@@ -16,29 +16,29 @@ public class Eingabe {
         int groesse;
         float gewicht;
 
-        System.out.println("----- Starte einlesen der Personendaten -----\n");
+        System.out.println("----- Start reading the personal data -----\n");
         do {
-            System.out.print("\nEingabe Geschlecht: Männlich = M   -   Weiblich = W: ");
+            System.out.print("\nInput gender: male = M   -   female = W: ");
             tmpStr = IOTools.readLine();
         } while (!(tmpStr.equalsIgnoreCase("M") || tmpStr.equalsIgnoreCase("W")));
         geschlecht = tmpStr.equalsIgnoreCase("M");
 
         do {
-            System.out.print("\nEingabe Name:");
+            System.out.print("\nInput name:");
             name = IOTools.readLine();
         } while (name.isEmpty());
 
         do {
-            System.out.print("\nEingabe Größe in cm: ");
+            System.out.print("\nInput height in cm: ");
             groesse = IOTools.readInt();
         } while (groesse == 0);
 
         do {
-            System.out.print("\nEingabe Gewicht: ");
+            System.out.print("\nInput weight: ");
             gewicht = IOTools.readFloat();
         } while (gewicht == 0);
 
-        System.out.println("----- Einlesen der Personendaten abgeschlossen -----\n\n");
+        System.out.println("----- Read in the personal data completed -----\n\n");
 
         return new Person(name, geschlecht, groesse, gewicht);
     }

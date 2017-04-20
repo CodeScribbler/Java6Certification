@@ -30,7 +30,7 @@ public class IOTools {
 
     private static void error(Exception var0, String var1) {
         System.out.println("Eingabefehler " + var0);
-        System.out.println("Bitte Eingabe wiederholen...");
+        System.out.println("Bitte Input wiederholen...");
         System.out.print(var1);
     }
 

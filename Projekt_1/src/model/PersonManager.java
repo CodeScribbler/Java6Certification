@@ -29,14 +29,9 @@ public class PersonManager {
 
             do {
 
-                System.out.println("\n --- BMI-RECHNER ----- \n");
-                System.out.println("  Personenübersicht:  1");
-                System.out.println("   Person esrtellen:  2");
-                System.out.println(" Personen verwalten:  3");
-                System.out.println("\n            Beenden:  0");
-                System.out.println(" --------------------- \n");
+                View.mainMenu();
 
-                System.out.print("\n Eingabe: ");
+                System.out.print("\n Input: ");
                 input = IOTools.readInt();
 
                 if (input > 0 & input <= 3) {
@@ -44,22 +39,23 @@ public class PersonManager {
                     switch (input) {
                         case 1:
                             System.out.println("\n#########################\n");
-                            for (Person iterator : personen) System.out.println(Ausgabe.gibAusPerson(iterator));
+                            for (Person iterator : personen) System.out.println(Output.printPerson(iterator));
                             System.out.println("\n#########################\n");
                             break;
                         case 2:
-                            personen.add(Eingabe.liesPerson());
+                            personen.add(Input.createPerson());
                             break;
                         case 3:
                             int tmp;
                             do {
-                                System.out.println(" ------- Verwaltung --------- \n");
-                                System.out.println(" Berechenen Normalgewicht: 1");
-                                System.out.println("  Berechenen Idealgewicht: 2");
-                                System.out.println("           Berechenen BMI: 3");
-                                System.out.println("\n                Abbrechen: 0");
+                                System.out.println(" ------- Control --------- \n");
+                                System.out.println(" Calculate normal weight: 1");
+                                System.out.println("  Calculate ideal weight: 2");
+                                System.out.println("           Calculate bmi: 3");
+                                System.out.println("\n                   Abort: 0");
                                 System.out.println(" --------------------------- \n");
-                                System.out.print("\n\n Eingabe: ");
+
+                                System.out.print("\n\n Input: ");
                                 tmp = IOTools.readInt();
 
                                 if (tmp > 0 & tmp <= 3) {
@@ -71,10 +67,10 @@ public class PersonManager {
                                                 System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
                                                 if (tmp % 2 == 0) System.out.print("\n");
                                             }
-                                            System.out.print("\n Eingabe Nr:");
+                                            System.out.print("\n Input Nr:");
                                             tmp = IOTools.readInt();
                                             if (tmp >= 0 && tmp <= personen.size()) {
-                                                System.out.println("\n " + personen.get(tmp).getName() + " Normalgewicht: " + personen.get(tmp).getNormalgewicht() + " kg" + "\n\n");
+                                                System.out.println("\n " + personen.get(tmp).getName() + " Normal weight: " + personen.get(tmp).getNormalWeight() + " kg" + "\n\n");
                                                 ++tmp;
                                             }
                                             break;
@@ -84,10 +80,10 @@ public class PersonManager {
                                                 System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
                                                 if (tmp % 2 == 0) System.out.print("\n");
                                             }
-                                            System.out.print("\n Eingabe Nr:");
+                                            System.out.print("\n Input Nr:");
                                             tmp = IOTools.readInt();
                                             if (tmp >= 0 && tmp <= personen.size()) {
-                                                System.out.println("\n " + personen.get(tmp).getName() + " Idealgewicht: " + personen.get(tmp).getIdealgewicht() + " kg" + "\n\n");
+                                                System.out.println("\n " + personen.get(tmp).getName() + " Ideal weight: " + personen.get(tmp).getIdealWeight() + " kg" + "\n\n");
                                                 ++tmp;
                                             }
                                             break;
@@ -97,10 +93,10 @@ public class PersonManager {
                                                 System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
                                                 if (tmp % 2 == 0) System.out.print("\n");
                                             }
-                                            System.out.print("\n Eingabe Nr:");
+                                            System.out.print("\n Input Nr:");
                                             tmp = IOTools.readInt();
                                             if (tmp >= 0 && tmp <= personen.size()) {
-                                                System.out.println("\n " + personen.get(tmp).getName() + " BMI: " + personen.get(tmp).getBmiwert() + " kg" + "\n\n");
+                                                System.out.println("\n " + personen.get(tmp).getName() + " BMI: " + personen.get(tmp).getBmiValue() + " kg" + "\n\n");
                                                 ++tmp;
                                             }
                                             break;
