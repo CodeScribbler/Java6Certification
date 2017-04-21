@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 public class Person implements Serializable, Comparable<Person> {
 
@@ -63,25 +62,8 @@ public class Person implements Serializable, Comparable<Person> {
 
     @Override
     public int compareTo(Person obj) {
-        if(this.name.equalsIgnoreCase(obj.getName())) return 1;
-		else return 0;
+        if (this.name.equalsIgnoreCase(obj.getName())) return 1;
+        else return 0;
     }
-}
 
-class sortedByName implements Comparator<Person> {
-
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return o1.getName().compareToIgnoreCase(o2.getName());
-    }
-}
-
-class sortedByGender implements Comparator<Person> {
-
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return o1.getGender().compareTo(o2.getGender());
-    }
 }

@@ -1,7 +1,7 @@
 package io;
 
 import model.Gender;
-import util.IOTools;
+import model.Start;
 import model.Person;
 
 public class Input {
@@ -10,35 +10,28 @@ public class Input {
 
     public static Person createPerson() {
 
-        String tmpStr;
-
-        String name;
-        Gender gender;
-        int height;
-        float weight;
+        String name = null;
+        Gender gender = null;
+        int height = 0;
+        float weight = 0.0F;
 
         System.out.println("----- Start reading the personal data -----\n");
-        do {
-            System.out.print("\nInput gender: male = M   -   female = F: ");
-            tmpStr = IOTools.readLine();
-        } while (!(tmpStr.equalsIgnoreCase("M") || tmpStr.equalsIgnoreCase("F")));
-        if(tmpStr.equalsIgnoreCase("M")) gender = Gender.MALE;
-        else gender = Gender.FEMALE;
 
-        do {
-            System.out.print("\nInput name:");
-            name = IOTools.readLine();
-        } while (name.isEmpty());
+        while (gender == null) {
+            gender = Start.readGender("Input gender: male = M   -   female = F: ");
+        }
 
-        do {
-            System.out.print("\nInput height in cm: ");
-            height = IOTools.readInt();
-        } while (height == 0);
+        while (name == null){
+            name = Start.readLine("Input name: ");
+        }
 
-        do {
-            System.out.print("\nInput weight: ");
-            weight = IOTools.readFloat();
-        } while (weight == 0);
+        while (height <= 0) {
+            height = Start.readInt("Input height in cm: ");
+        }
+
+        while (weight <= 0.0F) {
+            weight = Start.readFloat("Input weight: ");
+        }
 
         System.out.println("----- Read in the personal data completed -----\n\n");
 

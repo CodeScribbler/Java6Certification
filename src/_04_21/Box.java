@@ -3,23 +3,29 @@ package _04_21;
 
 import java.util.*;
 
-public class Box implements Comparable<Box> {
+public class Box implements Comparable<Box>{
+    int price;
+    String inhalt;
+    C c;
+    public Box(int price, String inhalt) {
+        super();
+        this.price = price;
+        this.inhalt = inhalt;
 
-    public static void main(String[] args) {
-        Collection<Box> boxList = new ArrayList<Box>();
-
-        Collections.binarySearch((List<? extends Comparable<? super Object>>) boxList, null);
-
-        Collections.sort((List<Box>) boxList, new SortierVorgabe());
+    }
+    @Override
+    public String toString() {
+        return "Box [price=" + price + ", inhalt=" + inhalt + "]";
     }
 
-
-
-
     @Override
-    public int compareTo(Box o) {
-
-        return 0;
+    public int compareTo(Box other) {//gleich (0) kleiner (-) groesser (+)
+//		if(this.price == other.price) return 0;
+//		else if(this.price < other.price) return -1;
+//		return 1;
+        return new Integer(this.price).compareTo(other.price);
+        //return this.inhalt.compareTo(other.inhalt);
+        //return this.c.getS().compareTo(other.c.getS());
     }
 }
 
