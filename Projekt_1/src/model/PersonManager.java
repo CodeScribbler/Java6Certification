@@ -75,8 +75,6 @@ public class PersonManager {
                                             System.out.println("\n Input name: ");
                                             String name = IOTools.readString();
                                             System.out.println(Collections.binarySearch(personen, name), new sortedByName());
-
-
                                     }
                                 }
 
@@ -92,7 +90,7 @@ public class PersonManager {
                                 System.out.println("  Calculate ideal weight: 2");
                                 System.out.println("           Calculate bmi: 3");
                                 System.out.println("\n                   Abort: 0");
-                                System.out.println(" --------------------------- \n");
+                                System.out.println(" -------------------------- \n");
 
                                 System.out.print("\n\n Input: ");
                                 tmp = IOTools.readInt();
