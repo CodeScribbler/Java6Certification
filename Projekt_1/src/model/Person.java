@@ -1,9 +1,12 @@
 package model;
 
-public class Person {
+import java.io.Serializable;
+import java.util.Comparator;
+
+public class Person implements Serializable, Comparable<Person> {
 
     private String name;
-    private boolean gender;     // true male, false female
+    private Gender gender;
     private int height;
     private float weight;
 
@@ -12,7 +15,7 @@ public class Person {
         return name;
     }
 
-    public boolean getGender() {
+    public Gender getGender() {
         return gender;
     }
 
@@ -25,23 +28,23 @@ public class Person {
     }
 
 
-    public Person(String name, boolean gender, int height, float weight) {
+    public Person(String name, Gender gender, int height, float weight) {
         this.name = name;
         this.gender = gender;
         this.height = height;
         this.weight = weight;
     }
 
-    public Person(String name, boolean gender, int height) {
+    public Person(String name, Gender gender, int height) {
         this(name, gender, height, 80);
     }
 
-    public Person(String name, boolean gender) {
+    public Person(String name, Gender gender) {
         this(name, gender, 180);
     }
 
     public Person() {
-        this("Max Mustermann", true);
+        this("Max Mustermann", Gender.MALE);
     }
 
 
@@ -57,4 +60,28 @@ public class Person {
         return Bmi.getNormalgWeight(this);
     }
 
+
+    @Override
+    public int compareTo(Person obj) {
+        if(this.name.equalsIgnoreCase(obj.getName())) return 1;
+		else return 0;
+    }
+}
+
+class sortedByName implements Comparator<Person> {
+
+
+    @Override
+    public int compare(Person o1, Person o2) {
+        return o1.getName().compareToIgnoreCase(o2.getName());
+    }
+}
+
+class sortedByGender implements Comparator<Person> {
+
+
+    @Override
+    public int compare(Person o1, Person o2) {
+        return o1.getGender().compareTo(o2.getGender());
+    }
 }

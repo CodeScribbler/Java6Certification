@@ -13,7 +13,7 @@ public class Bmi {
     }
 
     public static float getIdealgewicht(Person obj) {
-        if (obj.getGender()) {
+        if (obj.getGender() == Gender.MALE) {
             return getNormalgWeight(obj) * MALE;
         } else {
             return getNormalgWeight(obj) * FEMALE;
