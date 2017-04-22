@@ -2,7 +2,7 @@ package model;
 
 import java.io.Serializable;
 
-public class Person implements Serializable, Comparable<Person> {
+public class Person implements Serializable {
 
     private String name;
     private Gender gender;
@@ -57,13 +57,6 @@ public class Person implements Serializable, Comparable<Person> {
 
     public float getNormalWeight() {
         return Bmi.getNormalgWeight(this);
-    }
-
-
-    @Override
-    public int compareTo(Person obj) {
-        if (this.name.equalsIgnoreCase(obj.getName())) return 1;
-        else return 0;
     }
 
 }

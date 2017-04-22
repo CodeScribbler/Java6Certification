@@ -1,27 +1,18 @@
 package model;
 
 import io.*;
-import javax.swing.*;
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.StringTokenizer;
+import util.Utility;
+
+import java.util.*;
 
 public class Start {
 
-    private static BufferedReader in;
-    private static StringTokenizer input;
-
     public static void main(String[] args) {
 
-        startMenu(PersonManager.personen);
+        showMainMenu(PersonManager.personsList);
     }
 
-
-    private static void startMenu(ArrayList<Person> personen) {
+    private static void showMainMenu(ArrayList<Person> personsList) {
         int input;
         do {
             System.out.println("\n --- Bmi Calculator --- \n");
@@ -31,19 +22,19 @@ public class Start {
             System.out.println("\n                 Exit:  0");
             System.out.println(" --------------------- \n");
 
-            input = Start.readInt("\n Input: ");
+            input = Utility.readInt("\n Input: ");
 
             if (input > 0 & input <= 3) {
 
                 switch (input) {
                     case 1:
-                        showEntriesMenu(personen);
+                        showEntriesMenu(personsList);
                         break;
                     case 2:
-                        personen.add(Input.createPerson());
+                        personsList.add(Input.createPerson());
                         break;
                     case 3:
-                        subMenuControl(personen);
+                        showControlMenu(personsList);
                         break;
                 }
             }
@@ -51,8 +42,8 @@ public class Start {
 
     }
 
-    private static void subMenuControl(ArrayList<Person> personen) {
-        int tmp;
+    private static void showControlMenu(ArrayList<Person> personsList) {
+        int val;
         do {
             System.out.println(" ------- Control --------- \n");
             System.out.println(" Calculate normal weight: 1");
@@ -61,158 +52,121 @@ public class Start {
             System.out.println("\n                   Abort: 0");
             System.out.println(" -------------------------- \n");
 
-            tmp = Start.readInt("\n Input: ");
+            val = Utility.readInt("\n Input: ");
 
-            if (tmp > 0 & tmp <= 3) {
+            if (val > 0 & val <= 3) {
 
-                switch (tmp) {
+                switch (val) {
                     case 1:
-                        tmp = 0;
-                        for (Person iterator : personen) {
-                            System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
-                            if (tmp % 2 == 0) System.out.print("\n");
+                        val = 0;
+                        for (Person iterator : personsList) {
+                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
+                            if (val % 2 == 0) System.out.print("\n");
                         }
-                        tmp = Start.readInt("\n Input: ");
-                        if (tmp >= 0 && tmp <= personen.size()) {
-                            System.out.println("\n " + personen.get(tmp).getName() + " Normal weight: " + personen.get(tmp).getNormalWeight() + " kg" + "\n\n");
-                            ++tmp;
+                        val = Utility.readInt("\n Input: ");
+                        if (val >= 0 && val <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(val).getName() + " Normal weight: " + personsList.get(val).getNormalWeight() + " kg" + "\n\n");
+                            ++val;
                         }
                         break;
                     case 2:
-                        tmp = 0;
-                        for (Person iterator : personen) {
-                            System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
-                            if (tmp % 2 == 0) System.out.print("\n");
+                        val = 0;
+                        for (Person iterator : personsList) {
+                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
+                            if (val % 2 == 0) System.out.print("\n");
                         }
-                        tmp = Start.readInt("\n Input: ");
-                        if (tmp >= 0 && tmp <= personen.size()) {
-                            System.out.println("\n " + personen.get(tmp).getName() + " Ideal weight: " + personen.get(tmp).getIdealWeight() + " kg" + "\n\n");
-                            ++tmp;
+                        val = Utility.readInt("\n Input: ");
+                        if (val >= 0 && val <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(val).getName() + " Ideal weight: " + personsList.get(val).getIdealWeight() + " kg" + "\n\n");
+                            ++val;
                         }
                         break;
                     case 3:
-                        tmp = 0;
-                        for (Person iterator : personen) {
-                            System.out.print(tmp++ + "). " + iterator.getName() + "  \t ");
-                            if (tmp % 2 == 0) System.out.print("\n");
+                        val = 0;
+                        for (Person iterator : personsList) {
+                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
+                            if (val % 2 == 0) System.out.print("\n");
                         }
-                        tmp = Start.readInt("\n Input: ");
-                        if (tmp >= 0 && tmp <= personen.size()) {
-                            System.out.println("\n " + personen.get(tmp).getName() + " BMI: " + personen.get(tmp).getBmiValue() + " kg" + "\n\n");
-                            ++tmp;
+                        val = Utility.readInt("\n Input: ");
+                        if (val >= 0 && val <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(val).getName() + " BMI: " + personsList.get(val).getBmiValue() + " kg" + "\n\n");
+                            ++val;
                         }
                         break;
                 }
             }
 
-        } while (tmp != 0);
+        } while (val != 0);
     }
 
-    private static void showEntriesMenu(ArrayList<Person> personen) {
+    private static void showEntriesMenu(ArrayList<Person> personsList) {
         int tmp;
         do {
 
             System.out.println("\n --- Show entries --- \n");
-            System.out.println("             Regular:  1");
-            System.out.println("      Sorted by name:  2");
-            System.out.println("    Sorted by gender:  3");
-            System.out.println("              Search:  4");
+            System.out.println("      Sort by name:  1");
+            System.out.println("    Sort by gender:  2");
+            System.out.println("    Sort by weight:  3");
+            System.out.println("            Search:  4");
             System.out.println("\n              Exit:  0");
             System.out.println(" --------------------- \n");
 
-            tmp = Start.readInt("\nInput: ");
+            tmp = Utility.readInt("\nInput: ");
 
             if (tmp > 0 & tmp <= 4) {
 
                 switch (tmp) {
                     case 1:
-                        Collections.sort(personen);
-                        System.out.println("\n########## Regular #########\n");
-                        for (Person iterator : personen) System.out.println(Output.printPerson(iterator));
-                        System.out.println("\n#########################\n");
+                        Collections.sort(personsList, new Comparator<Person>() {
+                            @Override
+                            public int compare(Person first, Person second) {
+                                return first.getName().compareTo(second.getName());
+                            }
+                        });
+                        System.out.println("\n####### Sorted by name #######\n");
+                        for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
+                        System.out.println("\n##############################\n");
                         break;
+
                     case 2:
-                        Collections.sort(personen, new sortedByName());
-                        System.out.println("\n########## By name #########\n");
-                        for (Person iterator : personen) System.out.println(Output.printPerson(iterator));
-                        System.out.println("\n#########################\n");
+                        Collections.sort(personsList, new Comparator<Person>() {
+                            @Override
+                            public int compare(Person first, Person second) {
+                                return first.getGender().compareTo(second.getGender());
+                            }
+                        });
+                        System.out.println("\n####### Sorted by gender #######\n");
+                        for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
+                        System.out.println("\n################################\n");
                         break;
+
                     case 3:
-                        Collections.sort(personen, new sortedByGender());
-                        System.out.println("\n########## By Gender #########\n");
-                        for (Person iterator : personen) System.out.println(Output.printPerson(iterator));
-                        System.out.println("\n#########################\n");
+                        PersonManager.bubbleSort(personsList);
+                        System.out.println("\n####### Sorted by weight #######\n");
+                        for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
+                        System.out.println("\n################################\n");
                         break;
+
                     case 4:
-                        String name = Start.readLine("\n Input name: ");
-                        int val = Collections.binarySearch(personen, new Person("Philipp", Gender.MALE, 192, 95), new sortedByGender());
+                        System.out.println("\n####### Serach by name #######\n");
+                        String name = Utility.readString(" Input name: ");
+                        name = Start.searchPerson(personsList, name);
+                        System.out.println(name);
+                        System.out.println("\n##############################\n");
+                        break;
                 }
             }
 
         } while (tmp != 0);
     }
 
-
-    public static String readLine(String prompt) {
-        System.out.print(prompt);
-        try {
-            return in.readLine();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);;
+    private static String searchPerson(ArrayList<Person> personsList, String name) {
+        for (Person iterator : personsList) {
+            if(iterator.getName().equalsIgnoreCase(name)) {
+                return "\n Search successful! \n" + Output.printPersonWithWeightAndBmi(iterator);
+            }
         }
-        return null;
-    }
-
-    public static float readFloat(String prompt) {
-        System.out.print(prompt);
-        try {
-            return Float.parseFloat(input.nextToken());
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-        }
-        return 0.0F;
-    }
-
-    public static int readInt(String prompt) {
-        System.out.print(prompt);
-        try {
-            return Integer.parseInt(input.nextToken());
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error",  JOptionPane.ERROR_MESSAGE);
-        }
-        return 0;
-    }
-
-    public static Gender readGender(String prompt) {
-        System.out.print(prompt);
-        try {
-            return Gender.parseGender(input.nextToken());
-
-        } catch (GenderParseException e) {
-            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        return null;
+        return "\n Search failed!";
     }
 
 }
-
-class sortedByName implements Comparator<Person> {
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return o1.getName().compareToIgnoreCase(o2.getName());
-    }
-}
-
-class sortedByGender implements Comparator<Person> {
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return o1.getGender().compareTo(o2.getGender());
-    }
-}
-
-
-
