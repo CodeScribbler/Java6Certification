@@ -25,7 +25,7 @@ public class PersonManager {
                 return true;
             }
         }
-        //return false;
+        return false;
     }
 
     public static void bubbleSort(ArrayList<Person> personsList) {

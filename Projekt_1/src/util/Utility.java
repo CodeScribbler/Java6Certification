@@ -81,19 +81,19 @@ public class Utility {
         try {
             if (isDirNotEmpty(dir)) {
 
-                int i = 0;
+                int counter = 0;
                 File[] filesList = dir.listFiles();
                 for(File f : filesList){
                     if(f.isFile()){
-                        System.out.print(i++ + ") - " + f.getName());
+                        System.out.print("Nr. " + counter++ + ") - " + f.getName());
                     }
                 }
                 int val;
                 do {
                     val = readInt("Choose which person should be inserted by nr: ");
-                } while(val >= 0 && val <= i);
+                } while(val >= 0 && val <= counter);
 
-                String filename = "";
+                String filename
 
                 ObjectInputStream objOutStream = null;
                 try {
@@ -105,7 +105,7 @@ public class Utility {
                     }
                     else {
                         personsList.add(obj);
-                        System.out.println("The person is succesful inserted!");
+                        System.out.println(" The person is successful inserted!");
                     }
 
                 } catch (FileNotFoundException e) {
@@ -126,7 +126,7 @@ public class Utility {
                 }
 
             }
-            else System.out.println("No backup files are exist!\n");
+            else System.out.println(" No backup files are exist!\n");
 
         } catch (IOException e) { JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE); }
     }
@@ -135,9 +135,8 @@ public class Utility {
         if (dir.isDirectory() && dir.exists()) {
             if (dir.list().length > 0)
                 return true;     // Directory is not empty
-        } else {
-            return false;        // Directory is empty");
         }
+            return false;        // Directory is empty");
     }
 
 }
