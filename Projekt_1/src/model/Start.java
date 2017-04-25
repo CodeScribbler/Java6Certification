@@ -9,17 +9,17 @@ public class Start {
 
     public static void main(String[] args) {
 
-        showMainMenu(PersonManager.personsList);
+        showMainMenu(PersonManager.peopleList);
     }
 
-    private static void showMainMenu(ArrayList<Person> personsList) {
+    private static void showMainMenu(LinkedList<Person> personsList) {
         int input;
         do {
             System.out.println("\n --- Bmi Calculator --- \n");
             System.out.println("       Show entries:  1");
             System.out.println("      Create person:  2");
             System.out.println("            Control:  3");
-            System.out.println("\n                 Exit:  0");
+            System.out.println("\n               Exit:  0");
             System.out.println(" --------------------- \n");
 
             input = Utility.readInt("\n Input: ");
@@ -40,21 +40,23 @@ public class Start {
             }
         } while (input != 0);
 
+        System.exit(0);
     }
 
-    private static void showControlMenu(ArrayList<Person> personsList) {
+    private static void showControlMenu(LinkedList<Person> personsList) {
         int val;
         do {
             System.out.println(" ------- Control --------- \n");
             System.out.println(" Calculate normal weight: 1");
             System.out.println("  Calculate ideal weight: 2");
             System.out.println("           Calculate bmi: 3");
+            System.out.println("           Export person: 4");
             System.out.println("\n                   Abort: 0");
             System.out.println(" -------------------------- \n");
 
             val = Utility.readInt("\n Input: ");
 
-            if (val > 0 & val <= 3) {
+            if (val > 0 & val <= 4) {
 
                 switch (val) {
                     case 1:
@@ -93,13 +95,18 @@ public class Start {
                             ++val;
                         }
                         break;
+
+                    case 4:
+
+                        PersonsMemory.writeCsvFile(personsList);
+                        break;
                 }
             }
 
         } while (val != 0);
     }
 
-    private static void showEntriesMenu(ArrayList<Person> personsList) {
+    private static void showEntriesMenu(LinkedList<Person> personsList) {
         int tmp;
         do {
 
@@ -108,7 +115,7 @@ public class Start {
             System.out.println("    Sort by gender:  2");
             System.out.println("    Sort by weight:  3");
             System.out.println("            Search:  4");
-            System.out.println("\n              Exit:  0");
+            System.out.println("\n            Exit:  0");
             System.out.println(" --------------------- \n");
 
             tmp = Utility.readInt("\nInput: ");
@@ -123,6 +130,7 @@ public class Start {
                                 return first.getName().compareTo(second.getName());
                             }
                         });
+
                         System.out.println("\n####### Sorted by name #######\n");
                         for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
                         System.out.println("\n##############################\n");
@@ -135,13 +143,21 @@ public class Start {
                                 return first.getGender().compareTo(second.getGender());
                             }
                         });
+
                         System.out.println("\n####### Sorted by gender #######\n");
                         for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
                         System.out.println("\n################################\n");
                         break;
 
                     case 3:
-                        PersonManager.bubbleSort(personsList);
+                        Collections.sort(personsList, new Comparator<Person>() {
+                            @Override
+                            public int compare(Person first, Person second) {
+                                if (first.getWeight() < second.getWeight()) return -1;
+                                if (first.getWeight() > second.getWeight()) return 1;
+                                return 0;
+                            }
+                        });
                         System.out.println("\n####### Sorted by weight #######\n");
                         for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
                         System.out.println("\n################################\n");
@@ -154,13 +170,14 @@ public class Start {
                         System.out.println(name);
                         System.out.println("\n##############################\n");
                         break;
+
                 }
             }
 
         } while (tmp != 0);
     }
 
-    private static String searchPerson(ArrayList<Person> personsList, String name) {
+    private static String searchPerson(LinkedList<Person> personsList, String name) {
         for (Person iterator : personsList) {
             if(iterator.getName().equalsIgnoreCase(name)) {
                 return "\n Search successful! \n" + Output.printPersonWithWeightAndBmi(iterator);

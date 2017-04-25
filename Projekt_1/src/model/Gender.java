@@ -3,7 +3,8 @@ package model;
 import util.GenderParseException;
 
 public enum Gender {
-    MALE, FEMALE;
+    MALE, FEMALE, UNKNOWN;
+
 
     public static Gender parseGender(String input) throws GenderParseException {
         if (!input.isEmpty()) {
@@ -12,4 +13,5 @@ public enum Gender {
         }
         throw new GenderParseException(input);
     }
+
 }
