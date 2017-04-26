@@ -9,32 +9,45 @@ public class Start {
 
     public static void main(String[] args) {
 
-        showMainMenu(PersonManager.peopleList);
+        showMainMenu(PersonManager.personsList);
     }
 
     private static void showMainMenu(LinkedList<Person> personsList) {
         int input;
         do {
-            System.out.println("\n --- Bmi Calculator --- \n");
-            System.out.println("       Show entries:  1");
-            System.out.println("      Create person:  2");
-            System.out.println("            Control:  3");
-            System.out.println("\n               Exit:  0");
+            System.out.println("\n - Weight calculator - ");
+            System.out.println("      Create person:  1");
+            System.out.println("      Delete person:  2");
+            System.out.println("      Serach person:  3");
+            System.out.println("           Overview:  4");
+            System.out.println("           Settings:  5");
+            System.out.println(" - - - - - - - - - - - ");
+            System.out.println("               Exit:  0");
             System.out.println(" --------------------- \n");
 
             input = Utility.readInt("\n Input: ");
 
-            if (input > 0 & input <= 3) {
+            if (input > 0 & input <= 5) {
 
                 switch (input) {
                     case 1:
-                        showEntriesMenu(personsList);
-                        break;
-                    case 2:
                         personsList.add(Input.createPerson());
                         break;
+
+                    case 2:
+                        PersonManager.deletePerson();
+                        break;
+
                     case 3:
-                        showControlMenu(personsList);
+                        PersonManager.searchPerson();
+                        break;
+
+                    case 4:
+                        showOverviewMenu(personsList);
+                        break;
+
+                    case 5:
+                        showSettingsMenu();
                         break;
                 }
             }
@@ -43,86 +56,28 @@ public class Start {
         System.exit(0);
     }
 
-    private static void showControlMenu(LinkedList<Person> personsList) {
-        int val;
-        do {
-            System.out.println(" ------- Control --------- \n");
-            System.out.println(" Calculate normal weight: 1");
-            System.out.println("  Calculate ideal weight: 2");
-            System.out.println("           Calculate bmi: 3");
-            System.out.println("           Export person: 4");
-            System.out.println("\n                   Abort: 0");
-            System.out.println(" -------------------------- \n");
-
-            val = Utility.readInt("\n Input: ");
-
-            if (val > 0 & val <= 4) {
-
-                switch (val) {
-                    case 1:
-                        val = 0;
-                        for (Person iterator : personsList) {
-                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
-                            if (val % 2 == 0) System.out.print("\n");
-                        }
-                        val = Utility.readInt("\n Input: ");
-                        if (val >= 0 && val <= personsList.size()) {
-                            System.out.println("\n " + personsList.get(val).getName() + " Normal weight: " + personsList.get(val).getNormalWeight() + " kg" + "\n\n");
-                            ++val;
-                        }
-                        break;
-                    case 2:
-                        val = 0;
-                        for (Person iterator : personsList) {
-                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
-                            if (val % 2 == 0) System.out.print("\n");
-                        }
-                        val = Utility.readInt("\n Input: ");
-                        if (val >= 0 && val <= personsList.size()) {
-                            System.out.println("\n " + personsList.get(val).getName() + " Ideal weight: " + personsList.get(val).getIdealWeight() + " kg" + "\n\n");
-                            ++val;
-                        }
-                        break;
-                    case 3:
-                        val = 0;
-                        for (Person iterator : personsList) {
-                            System.out.print(val++ + "). " + iterator.getName() + "  \t ");
-                            if (val % 2 == 0) System.out.print("\n");
-                        }
-                        val = Utility.readInt("\n Input: ");
-                        if (val >= 0 && val <= personsList.size()) {
-                            System.out.println("\n " + personsList.get(val).getName() + " BMI: " + personsList.get(val).getBmiValue() + " kg" + "\n\n");
-                            ++val;
-                        }
-                        break;
-
-                    case 4:
-
-                        PersonsMemory.writeCsvFile(personsList);
-                        break;
-                }
-            }
-
-        } while (val != 0);
-    }
-
-    private static void showEntriesMenu(LinkedList<Person> personsList) {
-        int tmp;
+    private static void showOverviewMenu(LinkedList<Person> personsList) {
+        int input;
         do {
 
-            System.out.println("\n --- Show entries --- \n");
-            System.out.println("      Sort by name:  1");
-            System.out.println("    Sort by gender:  2");
-            System.out.println("    Sort by weight:  3");
-            System.out.println("            Search:  4");
-            System.out.println("\n            Exit:  0");
-            System.out.println(" --------------------- \n");
+            System.out.println("\n ------- Overview ------- ");
+            System.out.println("            Sort by name:  1");
+            System.out.println("          Sort by gender:  2");
+            System.out.println("             Sort by bmi:  3");
+            System.out.println(" - - - - - - - - - - - - - -");
+            System.out.println(" Calculate normal weight:  4");
+            System.out.println("  Calculate ideal weight:  5");
+            System.out.println("           Calculate bmi:  6");
+            System.out.println(" - - - - - - - - - - - - - -");
+            System.out.println("                    Back:  0");
+            System.out.println(" --------------------------- \n");
 
-            tmp = Utility.readInt("\nInput: ");
+            input = Utility.readInt("\n Input: ");
 
-            if (tmp > 0 & tmp <= 4) {
+            if (input > 0 & input <= 6) {
 
-                switch (tmp) {
+                int value;
+                switch (input) {
                     case 1:
                         Collections.sort(personsList, new Comparator<Person>() {
                             @Override
@@ -153,37 +108,79 @@ public class Start {
                         Collections.sort(personsList, new Comparator<Person>() {
                             @Override
                             public int compare(Person first, Person second) {
-                                if (first.getWeight() < second.getWeight()) return -1;
-                                if (first.getWeight() > second.getWeight()) return 1;
+                                if (first.getBmiValue() < second.getBmiValue()) return -1;
+                                if (first.getBmiValue() > second.getBmiValue()) return 1;
                                 return 0;
                             }
                         });
-                        System.out.println("\n####### Sorted by weight #######\n");
+                        System.out.println("\n####### Sorted by bmi ##########\n");
                         for (Person iterator : personsList) System.out.println(Output.printPerson(iterator));
                         System.out.println("\n################################\n");
                         break;
 
                     case 4:
-                        System.out.println("\n####### Serach by name #######\n");
-                        String name = Utility.readString(" Input name: ");
-                        name = Start.searchPerson(personsList, name);
-                        System.out.println(name);
-                        System.out.println("\n##############################\n");
+                        PersonManager.printPersons();
+
+                        value = Utility.readInt("\n Input: ");
+                        if (value >= 0 && value <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(value).getName() + " Normal weight: " + personsList.get(value).getNormalWeight() + " kg" + "\n\n");
+                            ++value;
+                        }
                         break;
 
+                    case 5:
+                        PersonManager.printPersons();
+
+                        value = Utility.readInt("\n Input: ");
+                        if (value >= 0 && value <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(value).getName() + " Ideal weight: " + personsList.get(value).getIdealWeight() + " kg" + "\n\n");
+                            ++value;
+                        }
+                        break;
+
+                    case 6:
+                        PersonManager.printPersons();
+
+                        value = Utility.readInt("\n Input: ");
+                        if (value >= 0 && value <= personsList.size()) {
+                            System.out.println("\n " + personsList.get(value).getName() + " BMI: " + personsList.get(value).getBmiValue() + " kg" + "\n\n");
+                            ++value;
+                        }
+                        break;
                 }
             }
 
-        } while (tmp != 0);
+        } while (input != 0);
     }
 
-    private static String searchPerson(LinkedList<Person> personsList, String name) {
-        for (Person iterator : personsList) {
-            if(iterator.getName().equalsIgnoreCase(name)) {
-                return "\n Search successful! \n" + Output.printPersonWithWeightAndBmi(iterator);
+    private static void showSettingsMenu() {
+        int val;
+        do{
+            System.out.println(" -------- Settings --------- ");
+            System.out.println("           Export person: 1");
+            System.out.println("           Import person: 2");
+            System.out.println(" - - - - - - - - - - - - - ");
+            System.out.println("                    Back: 0");
+            System.out.println(" -------------------------- \n");
+
+            val = Utility.readInt("\n Input: ");
+
+            if (val > 0 & val <= 2) {
+
+                switch (val) {
+                    case 1:
+
+                        PersonManager.writeCsvFile();
+                        break;
+
+                    case 2:
+
+                        PersonManager.readCsvFile();
+                        break;
+                }
             }
-        }
-        return "\n Search failed!";
+
+        } while(val != 0);
     }
 
 }

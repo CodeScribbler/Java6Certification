@@ -34,7 +34,7 @@ public class Input {
             weight = Utility.readFloat("Input weight: ");
         }
 
-        System.out.println("----- Read in the personal data completed -----\n\n");
+        System.out.println("----- Read the personal data completed -----\n\n");
 
         return new Person(name, gender, height, weight);
     }

@@ -5,7 +5,7 @@ import model.*;
 public class Output {
 
     public static String printPerson(Person obj) {
-        return "  Person: \n --------- \n    Name: " + obj.getName() +
+        return "  Person: \n --------- \n   Name: " + obj.getName() +
                 "\n Gender: " + ((obj.getGender() == Gender.MALE) ? "Male" : "Female") +
                 "\n Height: " + obj.getHeight() + "\n Weight: " + obj.getWeight() + "\n";
     }
