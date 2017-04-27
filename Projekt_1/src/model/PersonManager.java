@@ -12,8 +12,6 @@ import java.util.LinkedList;
 public class PersonManager {
 
     private static final File FILE = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\PERSONS.csv");
-    private static final String DELIMITER = ";";
-    private static final String NEW_LINE = "\n";
 
     public static LinkedList<Person> personsList = new LinkedList<Person>();
 
@@ -41,7 +39,7 @@ public class PersonManager {
             personsList.remove(input);
             System.out.println("\n The person has been successfully deleted!");
         }
-        else System.out.println("\n Wrong input!");
+        else System.err.println("\n Wrong input!");
 
 
     }
@@ -64,10 +62,11 @@ public class PersonManager {
             if(iterator.getName().equalsIgnoreCase(name)) {
                 System.out.println("\n Search successful! \n" + Output.printPersonWithWeightAndBmi(iterator));
                 System.out.println("\n##############################\n");
+                return;
             }
         }
 
-        System.out.println("\n Search failed!");
+        System.err.println("\n Search failed!");
         System.out.println("\n##############################\n");
     }
 
@@ -78,14 +77,14 @@ public class PersonManager {
             fWriter = new BufferedWriter(new FileWriter(FILE));
 
             for (Person iterator : personsList) {
-                fWriter.append(String.valueOf(iterator.getName()));
-                fWriter.append(DELIMITER);
-                fWriter.append(String.valueOf(iterator.getGender()));
-                fWriter.append(DELIMITER);
-                fWriter.append(String.valueOf(iterator.getHeight()));
-                fWriter.append(DELIMITER);
-                fWriter.append(String.valueOf(iterator.getWeight()));
-                fWriter.append(NEW_LINE);
+                fWriter.write(String.valueOf(iterator.getName()));
+                fWriter.write(";");
+                fWriter.write(String.valueOf(iterator.getGender()));
+                fWriter.write(";");
+                fWriter.write(String.valueOf(iterator.getHeight()));
+                fWriter.write(";");
+                fWriter.write(String.valueOf(iterator.getWeight()));
+                fWriter.write("\n");
             }
 
             System.out.println("\n\nCSV file was created successfully!\n\n");
@@ -122,7 +121,7 @@ public class PersonManager {
 
                 while ((line = fReader.readLine()) != null) {
 
-                    String[] tokens = line.split(DELIMITER);
+                    String[] tokens = line.split(";");
 
                     if (tokens.length > 0) {
                         Person person = new Person(String.valueOf(tokens[NAME]),
@@ -140,7 +139,7 @@ public class PersonManager {
             } catch (GenderParseException e) {
                 JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } else System.out.println(" No file are exist!\n");
+        } else System.err.println("\n No file are exist!\n");
     }
 
 }

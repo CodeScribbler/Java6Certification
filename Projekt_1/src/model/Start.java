@@ -3,6 +3,7 @@ package model;
 import io.*;
 import util.Utility;
 
+import java.io.Console;
 import java.util.*;
 
 public class Start {
@@ -10,6 +11,9 @@ public class Start {
     public static void main(String[] args) {
 
         showMainMenu(PersonManager.personsList);
+
+
+
     }
 
     private static void showMainMenu(LinkedList<Person> personsList) {
