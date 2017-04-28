@@ -12,8 +12,6 @@ public class Start {
 
         showMainMenu(PersonManager.personsList);
 
-
-
     }
 
     private static void showMainMenu(LinkedList<Person> personsList) {

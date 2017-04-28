@@ -39,9 +39,6 @@ public class SetAPI {
         Set ts = new TreeSet(s);
         System.out.println(ts);
 
-
-
-
     }
 
 }

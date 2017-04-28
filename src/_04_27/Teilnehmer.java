@@ -22,20 +22,24 @@ package _04_27;
  */
 
 
-public class Teilnehmer {
+public class Teilnehmer implements Comparable {
+
+    static int ID = 100000;
+
     String name;    //Stefan Wege
     String kurs;    //OCPJP
     int id;         //123
     Note note;      //Note: 1,0 1,3 1,7 2,0 .... 5,0
 
 
-    public Teilnehmer(String name, String kurs, int id, Note note) {
+    public Teilnehmer(String name, String kurs, Note note) {
         super();
         this.name = name;
         this.kurs = kurs;
-        this.id = id;
+        this.id = ID++;
         this.note = note;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -45,17 +49,22 @@ public class Teilnehmer {
         Teilnehmer that = (Teilnehmer) o;
 
         if (id != that.id) return false;
-        if (!name.equals(that.name)) return false;
-        if (!kurs.equals(that.kurs)) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (kurs != null ? !kurs.equals(that.kurs) : that.kurs != null) return false;
         return note == that.note;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + kurs.hashCode();
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (kurs != null ? kurs.hashCode() : 0);
         result = 31 * result + id;
-        result = 31 * result + note.hashCode();
+        result = 31 * result + (note != null ? note.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

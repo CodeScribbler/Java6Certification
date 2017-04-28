@@ -9,7 +9,7 @@ public class Test {
     static int ID = 0;
     static Set<Teilnehmer> teilnehmerSet = new TreeSet<Teilnehmer>();
 
-    static {
+/*    static {
         teilnehmerSet.add(new Teilnehmer("Teilnehmer1", "OCPJP", ++ID, Note.EINS));
         teilnehmerSet.add(new Teilnehmer("Teilnehmer2", "OCPJP", ++ID, Note.EINS_MINUS));
         teilnehmerSet.add(new Teilnehmer("Teilnehmer3", "OCPJP", ++ID, Note.ZWEI));
@@ -21,7 +21,7 @@ public class Test {
         teilnehmerSet.add(new Teilnehmer("Teilnehmer9", "OCPJP", ++ID, Note.FUENF));
         teilnehmerSet.add(new Teilnehmer("Teilnehmer10", "OCPJP", ++ID, Note.FUENF_MINUS));
         teilnehmerSet.add(new Teilnehmer("Teilnehmer11", "OCPJP", ++ID, Note.SECHS));
-    }
+    }*/
 
     private static TreeSet<Teilnehmer> sampleTeilnehmer(TreeSet<Teilnehmer> teilnehmerliste) {
         return new TreeSet<Teilnehmer>();

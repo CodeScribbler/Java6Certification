@@ -93,7 +93,7 @@ public class PersonManager {
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
             if (fWriter != null) try {
                 fWriter.close();
