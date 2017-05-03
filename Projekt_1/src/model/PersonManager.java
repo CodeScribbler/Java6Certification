@@ -111,11 +111,10 @@ public class PersonManager {
             int HEIGHT = 2;
             int WEIGHT = 3;
 
-
-            BufferedReader fReader = null;
+            String line;
+            BufferedReader fReader;
 
             try {
-                String line = "";
 
                 fReader = new BufferedReader(new FileReader(FILE));
 
