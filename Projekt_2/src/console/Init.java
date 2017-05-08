@@ -1,6 +1,6 @@
-package Kontoverwaltung.console;
+package console;
 
-import Kontoverwaltung.model.Bank;
+import model.Bank;
 
 public class Init {
 

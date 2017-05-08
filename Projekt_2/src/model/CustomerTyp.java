@@ -1,4 +1,4 @@
-package Kontoverwaltung.model;
+package model;
 
 /**
  *  CustomerTyp Enumeration welche dazu dient Ihn als

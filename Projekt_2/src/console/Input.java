@@ -1,6 +1,7 @@
-package Kontoverwaltung.console;
+package console;
 
-import Kontoverwaltung.model.*;
+import model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.text.DateFormat;

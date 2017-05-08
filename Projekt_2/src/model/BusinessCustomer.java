@@ -1,4 +1,4 @@
-package Kontoverwaltung.model;
+package model;
 
 
 public class BusinessCustomer extends Customer {

@@ -1,9 +1,8 @@
-package Kontoverwaltung.model;
+package model;
 
-import Kontoverwaltung.console.Input;
+import console.Input;
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.text.*;
 import java.util.*;
 import java.util.List;

@@ -1,4 +1,4 @@
-package Kontoverwaltung.model;
+package model;
 
 import java.util.Date;
 
