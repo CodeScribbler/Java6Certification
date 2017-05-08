@@ -5,55 +5,112 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Input {
+
+    private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
 
     //  Static methods
 
     /**
      *
+     * @param prompt
+     * @return
      */
-    public static boolean createCustomer(Bank bank) {
-        String address, phoneNumber, email, firstname, lastname, companyName, contactFirstname, contactLastname, contactPhoneNumber;
-        Date birthdate;
-        int choice;
+    private static String emailValidation(String prompt) {
+        String email = Input.readString(prompt);
+        Matcher matcher = VALID_EMAIL.matcher(email);
 
-        System.out.println("\n - Kundenanlegung wird initialisiert - \n");
+        if (matcher.find()) return email;
 
-        do { address = readString("\n Geben Sie bitte die Adresse eine: "); } while (!checkInputCorrection());
-        do { phoneNumber = readString("\n Geben Sie bitte die Telefonnummer ein: "); } while (!checkInputCorrection());
-        do { email = readString("Geben Sie bitte die E-Mailadresse ein: "); } while (!checkInputCorrection());
+        return null;
+    }
 
+    /**
+     *
+     */
+    public static boolean createBuisnessCustomer(Bank bank) {
+        String address, phoneNumber, email, companyName, contactFirstname, contactLastname, contactPhoneNumber;
+
+        System.out.println("\n - Buisness Kundenanlegung wird initialisiert - \n");
 
         do {
-            choice = readInt("Was wollen Sie anlegen, auswahl per Nr. \n (1) - Privatekunden\n (2) - Firmenkunden\n (3) - Abbrechen");
+            companyName = readString("\n Eingabe Firmenname: ");
+        } while (!checkInputCorrection());
+        do {
+            contactFirstname = readString("\n Eingabe Ansprechpartner-Vorname: ");
+        } while (!checkInputCorrection());
+        do {
+            contactLastname = readString("\n Eingabe Ansprechpartner-Nachname: ");
+        } while (!checkInputCorrection());
+        do {
+            contactPhoneNumber = readString("\n Eingabe Telefonnummer: ");
+        } while (!checkInputCorrection());
 
-            switch (choice) {
-                case 1:
-                    do { firstname = readString("\n Geben Sie bitte den Vornamen ein: "); } while (!checkInputCorrection());
-                    do { lastname = readString("\n Geben Sie bitte den Nachnamen ein: "); } while (!checkInputCorrection());
-                    do { birthdate = readDate("\n Geben Sie bitte das Geburtsdatum ein, Formatvorgabe dd.mm.yyyy: "); } while (!checkInputCorrection());
+        do {
+            address = readString("\n Eingabe Adresse: ");
+        } while (!checkInputCorrection());
+        do {
+            phoneNumber = readString("\n Geben Sie bitte die Telefonnummer ein: ");
+        } while (!checkInputCorrection());
+        do {
+            email = emailValidation("\n Eingabe E-Mail Adresse: ");
+            if (email == null)
+                System.out.print(" Ungültige E-Mail-Adresse!\n");
+        } while (email == null || (!checkInputCorrection()));
 
-                    PrivateCustomer pCustomer = new PrivateCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate);
-                    bank.addCustomer(pCustomer);
-                    return true;
+        return bank.addCustomer(new BusinessCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.BUSINESSCUSTOMER, email, companyName, new Counterpart(contactFirstname, contactLastname, contactPhoneNumber)));
 
-                case 2:
-                    do { companyName = readString("\n Geben Sie bitte den Firmennamen ein: "); } while (!checkInputCorrection());
-                    do { contactFirstname = readString("\n Geben Sie bitte den Vornamen des Ansprechpartners ein: "); } while (!checkInputCorrection());
-                    do { contactLastname = readString("\n Geben Sie bitte den Nachnamen des Ansprechpartners ein: "); } while (!checkInputCorrection());
-                    do { contactPhoneNumber = readString("\n Geben Sie bitte die entsprechende Telefonnummer ein: "); } while (!checkInputCorrection());
+    }
 
-                    BusinessCustomer bCustomer = new BusinessCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.BUSINESSCUSTOMER, email, companyName, new Counterpart(contactFirstname, contactLastname, contactPhoneNumber));
-                    bank.addCustomer(bCustomer);
-                    return true;
+    /**
+     *
+     */
+    public static boolean createPrivateCustomer(Bank bank) {
+        String address, phoneNumber, email, firstname, lastname;
+        Date birthdate = null;
+
+        System.out.println("\n - Private Kundenanlegung wird initialisiert - \n");
+
+        do {
+            firstname = readString("\n Eingabe Vorname: ");
+        } while (!checkInputCorrection());
+
+        do {
+            lastname = readString("\n Eingabe Nachname: ");
+        } while (!checkInputCorrection());
+
+        do {
+            address = readString("\n Eingabe Adresse: ");
+        } while (!checkInputCorrection());
+
+        do {
+            phoneNumber = readString("\n Eingabe Telefonnummer: ");
+        } while (!checkInputCorrection());
+
+        do {
+            email = emailValidation("\n Eingabe E-Mail Adresse: ");
+            if (email == null)
+                System.out.print(" Ungültige E-Mail Adresse!\n");
+        } while (email == null || (!checkInputCorrection()));
+
+        do {
+            try {
+                birthdate = readDate("\n Eingabe Geburtsdatum, Formatvorgabe dd.mm.yyyy: ");
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }while (choice != 3);
-        return false;
+        }while (birthdate == null || (!checkInputCorrection()));
+
+        return bank.addCustomer(new PrivateCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate));
+
     }
 
     /**
@@ -63,7 +120,9 @@ public final class Input {
         double accountBalance;
 
         System.out.println("\n - Kontoanlegung wird initialisiert - \n");
-        do { accountBalance = readDouble("Geben Sie bitte den Kontostand ein: "); } while (!checkInputCorrection());
+        do {
+            accountBalance = readDouble("Geben Sie bitte den Kontostand ein: ");
+        } while (!checkInputCorrection());
         Account acc = new Account(Account.ledgerNumber++, accountBalance);
 
         bank.printPrivateCustomer(bank.getSortedCustomerList(false));
@@ -100,14 +159,11 @@ public final class Input {
 
             return new java.util.Scanner(System.in).nextByte();
 
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return -1;
@@ -122,14 +178,11 @@ public final class Input {
 
             return new java.util.Scanner(System.in).nextInt();
 
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return -1;
@@ -144,14 +197,11 @@ public final class Input {
 
             return new java.util.Scanner(System.in).nextLong();
 
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return -1;
@@ -166,14 +216,11 @@ public final class Input {
 
             return new java.util.Scanner(System.in).nextDouble();
 
-        }
-        catch (InputMismatchException e) {
+        } catch (InputMismatchException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
         return -1;
@@ -182,19 +229,17 @@ public final class Input {
     /**
      *
      */
-    public static Date readDate(String prompt) {
+    public static Date readDate(String prompt) throws ParseException {
         System.out.print(prompt);
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
-        try {
-            return formatter.parse(new java.util.Scanner(System.in).next());
-        }
-        catch (Exception e) { System.out.println(e.getMessage()); }
-        return null;
+        DateFormat formatter = new SimpleDateFormat("dd.mm.yyyy");
+
+        return formatter.parse(new java.util.Scanner(System.in).next());
     }
 
 
     //  Constructor
 
-    private Input(){}
+    private Input() {
+    }
 
 }

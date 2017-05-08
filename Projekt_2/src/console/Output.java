@@ -18,12 +18,12 @@ public final class Output {
 
             switch(choice) {
                 case 1: {
-                    if(Input.createCustomer(bank)) System.out.println("\n\n Der Privatkunde wurde erfolgreich angelegt!\n\n");
+                    if(Input.createPrivateCustomer(bank)) System.out.println("\n\n Der Privatkunde wurde erfolgreich angelegt!\n\n");
                     else System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
                     break;
                 }
                 case 2: {
-                    if(Input.createCustomer(bank)) System.out.println("\n\n Der Firmenkunde wurde erfolgreich angelegt!\n\n");
+                    if(Input.createBuisnessCustomer(bank)) System.out.println("\n\n Der Firmenkunde wurde erfolgreich angelegt!\n\n");
                     else System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
                     break;
                 }

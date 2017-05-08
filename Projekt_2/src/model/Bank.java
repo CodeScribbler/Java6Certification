@@ -75,8 +75,8 @@ public class Bank {
     /**
      *
      */
-    public void addCustomer(Customer obj) {
-        this.customerList.add(obj);
+    public boolean addCustomer(Customer obj) {
+        return this.customerList.add(obj);
     }
 
     /**
