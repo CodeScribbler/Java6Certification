@@ -3,16 +3,16 @@ package Kontoverwaltung.model;
 import Kontoverwaltung.console.Input;
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.text.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Formatter;
 
 /**
  *  Die Klasse Bank beinhaltet neben der Adresse
  *  und Identifikationsnummer..
  */
-public class Bank {
+public class Bank<T extends Customer> {
 
     // Attributes
 
@@ -42,8 +42,11 @@ public class Bank {
     private short zipcode;
 
 
-    // Field, initializer and methods
+    // Field with initializer and methods
 
+    /**
+     *
+     */
     private List<Customer> customerList = new ArrayList<Customer>();
 
     {
@@ -70,15 +73,46 @@ public class Bank {
         }
     }
 
+    /**
+     *
+     */
     public void addCustomer(Customer obj) {
         this.customerList.add(obj);
     }
 
-    public void printBuisnessCustomer() {
+    /**
+     *
+     */
+    public List<Customer> getSortedCustomerList(boolean sorted) {
+        List<Customer> result = new ArrayList<Customer>(customerList);
+        if (sorted)
+            Collections.sort(result, byId);
+
+        return result;
+    }
+
+    /**
+     *
+     */
+    public boolean printAllAccounts() {
+        boolean returnVal = false;
+        for (Customer INDEX : this.customerList) {
+            if (INDEX.getAccountSize() > 0) {
+                returnVal = true;
+                INDEX.printAccounts();
+            }
+        }
+        return returnVal;
+    }
+
+    /**
+     *
+     */
+    public void printBuisnessCustomer(List<Customer> cList) {
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
 
-        for (Customer index : customerList) {
+        for (Customer index : cList) {
             if (index instanceof BusinessCustomer)
                 formatter.format("%3d %11s %17s %21s %n", index.getCustomerId(), ((BusinessCustomer) index).getCompanyName(), ((BusinessCustomer) index).getContact().getFirstName(), ((BusinessCustomer) index).getContact().getFirstName());
         }
@@ -86,11 +120,14 @@ public class Bank {
         System.out.println(sb);
     }
 
-    public void printPrivateCustomer() {
+    /**
+     *
+     */
+    public void printPrivateCustomer(List<Customer> cList) {
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb);
 
-        for (Customer index : customerList) {
+        for (Customer index : cList) {
             if (index instanceof PrivateCustomer)
                 formatter.format("%3d %11s %17s %n", index.getCustomerId(), ((PrivateCustomer) index).getFirstName(), ((PrivateCustomer) index).getLastname() );
         }
@@ -98,6 +135,9 @@ public class Bank {
         System.out.println(sb);
     }
 
+    /**
+     *
+     */
     public boolean setAccount(int id, Account acc) {
         for (Customer index : customerList) {
             if(index instanceof PrivateCustomer) {
@@ -110,18 +150,22 @@ public class Bank {
         return false;
     }
 
+    /**
+     *
+     */
     public boolean searchCustomer(String option) {
         System.out.println("\n - Kundensuche wird initialisiert - \n");
         int id;
         String name;
         if (option.equalsIgnoreCase("byID")) id = Input.readInt("\n Geben Sie bitte die KdNr ein: ");
-        else {
-            name = Input.readString("\n Geben Sie bitte den Namen ein: ");
-            for (Customer INDEX : customerList) {
-                if (INDEX instanceof PrivateCustomer)
-                    if(((PrivateCustomer) INDEX).getLastname().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
-                if (INDEX instanceof BusinessCustomer)
-                    if(((BusinessCustomer) INDEX).getCompanyName().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
+        else
+            {
+                name = Input.readString("\n Geben Sie bitte den Namen ein: ");
+                for (Customer INDEX : customerList) {
+                    if (INDEX instanceof PrivateCustomer)
+                        if (((PrivateCustomer) INDEX).getLastname().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
+                    if (INDEX instanceof BusinessCustomer)
+                        if (((BusinessCustomer) INDEX).getCompanyName().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
             }
             return false;
         }
@@ -144,12 +188,35 @@ public class Bank {
         return false;
     }
 
+    /**
+     *
+     */
     public boolean searchAccount() {
         long iban = Input.readLong("\n Geben Sie bitte die IBAN ein: ");
-
-
+        for (Customer index : customerList) {
+            List<Account> accList = index.getAccounts();
+            for (Account pointer : accList) {
+                if(pointer.getAccountNumber() == iban) {
+                    System.out.println("\n IBAN: " + pointer.getAccountNumber() + " Kontostand: " + pointer.getAccountBalance());
+                    return true;
+                }
+            }
+        }
         return false;
     }
+
+
+    // Comparator sort by Id
+
+    /**
+     *
+     */
+    private final static Comparator<Customer> byId = new Comparator<Customer>() {
+        @Override
+        public int compare(Customer first, Customer second) {
+            return first.getCustomerId() > second.getCustomerId() ? -1 : first.getCustomerId() < second.getCustomerId() ? +1 : 0;
+        }
+    };
 
 
     // Constructor
