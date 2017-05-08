@@ -78,7 +78,7 @@ public final class Input {
      *
      */
     private static boolean checkInputCorrection() {
-        String input = readString(" Eingabe bestätigung mit Ja oder Nein: ");
+        String input = readString(" Eingabe bestätigen mit Ja oder Nein: ");
         return input.equalsIgnoreCase("j") || input.equalsIgnoreCase("ja");
     }
 

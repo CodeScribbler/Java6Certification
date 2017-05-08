@@ -11,7 +11,7 @@ import java.util.List;
  *  Die Klasse Bank beinhaltet neben der Adresse
  *  und Identifikationsnummer..
  */
-public class Bank<T extends Customer> {
+public class Bank {
 
     // Attributes
 
