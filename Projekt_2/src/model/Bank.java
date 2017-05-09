@@ -41,6 +41,10 @@ public class Bank {
     private short zipcode;
 
 
+    private int bankCode;
+
+
+
     // Field with initializer and methods
 
     /**
@@ -205,7 +209,7 @@ public class Bank {
     }
 
 
-    // Comparator sort by Id
+    // Comparator
 
     /**
      *
@@ -218,7 +222,7 @@ public class Bank {
     };
 
 
-    // Constructor
+    // Singleton constructor
 
     /**
      *  Anwendung des singleton Muster, um zu gewährleiten
@@ -230,6 +234,7 @@ public class Bank {
         this.address1 = "Breite Straße";
         this.address2 = "33-34";
         this.zipcode = 10435;
+        this.bankCode = 10070848;
     }
 
     /**

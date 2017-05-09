@@ -58,6 +58,36 @@ public final class Output {
                     if(!bank.printAllAccounts()) System.out.println("\n\n Es existieren aktuell keine Konten zur Ausgabe!\n\n");
                     break;
                 }
+                case 10: {
+
+                    break;
+
+                }
+                case 11: {
+
+                    break;
+
+                }
+                case 12: {
+
+                    break;
+
+                }
+                case 13: {
+
+                    break;
+
+                }
+                case 14: {
+
+                    break;
+
+                }
+                case 15: {
+
+                    break;
+
+                }
             }
         } while(choice != 10);
     }
@@ -69,7 +99,8 @@ public final class Output {
     private static final String[] mainMenu = { " (01) Privatkunde anlegen", " (02) Firmenkunde anlegen", " (03) Konto anlegen und Kundennummer zuordnen",
             " (04) Kunde mit Konten anzeigen (Auswahl durch Kundennummer)", " (05) Kunde mit Konten anzeigen (Auswahl durch Name)",
             " (06) Konto anzeigen (Auswahl durch IBAN) ", " (07) Alle Kunden unsortiert anzeigen", " (08) Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen",
-            " (09) Alle Konten unsortiert anzeigen", " (10) Beenden" };
+            " (09) Alle Konten unsortiert anzeigen", " (10) Geld auf Konto einzahlen", " (11) Geld vom Konto abheben", " (12) Transaktionsliste absteigend sortiert nach Zeitstempel anzeige",
+            " (13) Transaktionsliste aufsteigend sortiert nach Zeitstempel speichern", " (14) Transaktionsliste einlesen", " (15) Beenden"};
 
 
     /**
@@ -79,7 +110,6 @@ public final class Output {
         for (int i = 0; i < options.length; i++)
             System.out.println(options[i]);
     }
-
 
     private Output() {}
 
