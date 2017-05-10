@@ -19,12 +19,17 @@ public final class Input {
 
     //  Static methods
 
+    public static boolean despositMoney() {
+
+        return false;
+    }
+
     /**
      *
      * @param prompt
      * @return
      */
-    private static String emailValidation(String prompt) {
+    private static String validateEmail(String prompt) {
         String email = Input.readString(prompt);
         Matcher matcher = VALID_EMAIL.matcher(email);
 
@@ -61,7 +66,7 @@ public final class Input {
             phoneNumber = readString("\n Geben Sie bitte die Telefonnummer ein: ");
         } while (!checkInputCorrection());
         do {
-            email = emailValidation("\n Eingabe E-Mail Adresse: ");
+            email = validateEmail("\n Eingabe E-Mail Adresse: ");
             if (email == null)
                 System.out.print(" Ungültige E-Mail-Adresse!\n");
         } while (email == null || (!checkInputCorrection()));
@@ -96,7 +101,7 @@ public final class Input {
         } while (!checkInputCorrection());
 
         do {
-            email = emailValidation("\n Eingabe E-Mail Adresse: ");
+            email = validateEmail("\n Eingabe E-Mail Adresse: ");
             if (email == null)
                 System.out.print(" Ungültige E-Mail Adresse!\n");
         } while (email == null || (!checkInputCorrection()));

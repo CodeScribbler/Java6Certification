@@ -1,5 +1,7 @@
 package model;
 
+import java.util.LinkedList;
+
 
 public class Account {
 
@@ -17,6 +19,14 @@ public class Account {
      *
      */
     public static long ledgerNumber = 1000;
+
+
+    private LinkedList<Transaction> transactionsList = new LinkedList<Transaction>();
+
+
+    public void addTransaction(Transaction transaction) {
+        this.transactionsList.add(transaction);
+    }
 
     /**
      *
@@ -39,13 +49,6 @@ public class Account {
         this.accountBalance = accountBalance;
     }
 
-    /**
-     *
-     */
-    public Account(long accountNumber, double accountBalance) {
-        this.accountNumber = accountNumber;
-        this.accountBalance = accountBalance;
-    }
 
     /**
      *
@@ -54,4 +57,14 @@ public class Account {
     public String toString() {
         return "IBAN: " + accountNumber + " Kontostand: " + accountBalance;
     }
+
+
+    /**
+     *
+     */
+    public Account(long accountNumber, double accountBalance) {
+        this.accountNumber = accountNumber;
+        this.accountBalance = accountBalance;
+    }
+
 }
