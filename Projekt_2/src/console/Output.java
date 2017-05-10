@@ -3,6 +3,8 @@ package console;
 
 import model.Bank;
 
+import java.io.Console;
+
 public final class Output {
 
     /**
@@ -90,6 +92,7 @@ public final class Output {
                 }
             }
         } while(choice != 10);
+
     }
 
 
