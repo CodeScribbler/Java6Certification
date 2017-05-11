@@ -1,9 +1,7 @@
 package console;
 
-
 import model.Bank;
 
-import java.io.Console;
 
 public final class Output {
 
@@ -99,19 +97,21 @@ public final class Output {
     /**
      *
      */
-    private static final String[] mainMenu = { " (01) Privatkunde anlegen", " (02) Firmenkunde anlegen", " (03) Konto anlegen und Kundennummer zuordnen",
+    private static final String[] mainMenu = {
+            " (01) Privatkunde anlegen", " (02) Firmenkunde anlegen", " (03) Konto anlegen und Kundennummer zuordnen",
             " (04) Kunde mit Konten anzeigen (Auswahl durch Kundennummer)", " (05) Kunde mit Konten anzeigen (Auswahl durch Name)",
             " (06) Konto anzeigen (Auswahl durch IBAN) ", " (07) Alle Kunden unsortiert anzeigen", " (08) Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen",
             " (09) Alle Konten unsortiert anzeigen", " (10) Geld auf Konto einzahlen", " (11) Geld vom Konto abheben", " (12) Transaktionsliste absteigend sortiert nach Zeitstempel anzeige",
-            " (13) Transaktionsliste aufsteigend sortiert nach Zeitstempel speichern", " (14) Transaktionsliste einlesen", " (15) Beenden"};
+            " (13) Transaktionsliste aufsteigend sortiert nach Zeitstempel speichern", " (14) Transaktionsliste einlesen", " (15) Beenden"
+    };
 
 
     /**
      *
      */
     public static void printMenu(String[] options) {
-        for (int i = 0; i < options.length; i++)
-            System.out.println(options[i]);
+        for (String option : options)
+            System.out.println(option);
     }
 
     private Output() {}
