@@ -13,9 +13,13 @@ public class ThreadErzeugenUndStarten {
     }
 
     class TelefonistThread extends Thread {
+        public TelefonistThread(String name) {
+            super(name);
+            start();
+        }
         @Override
         public void run() {
-            System.out.println("TelefonistThread");
+            System.out.println(Thread.currentThread().getName());
         }
     }
 
@@ -54,7 +58,7 @@ public class ThreadErzeugenUndStarten {
     public static void main(String[] args) {
 
         new ThreadErzeugenUndStarten().new KochThread().start();
-        new ThreadErzeugenUndStarten().new TelefonistThread().start();
+        new ThreadErzeugenUndStarten().new TelefonistThread("Lucy").start();
         new ThreadErzeugenUndStarten().new LieferantThread().start();
 
 
