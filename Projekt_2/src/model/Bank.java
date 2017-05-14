@@ -1,48 +1,44 @@
 package model;
 
-import console.Input;
-import javax.swing.*;
-import java.awt.*;
 import java.text.*;
 import java.util.*;
 import java.util.List;
 
 /**
- *  Die Klasse Bank beinhaltet neben der Adresse
- *  und Identifikationsnummer..
+ * Die Klasse Bank beinhaltet neben der Adresse
+ * und Identifikationsnummer..
  */
 public class Bank {
 
     // Attributes
 
     /**
-     *  Name der Bank
+     * Name der Bank
      */
     private String name;
 
     /**
-     *  BIC
+     * BIC
      */
     private String identifierCode;
 
     /**
-     *  Teil 1 der Bankadresse.
+     * Teil 1 der Bankadresse.
      */
     private String address1;
 
     /**
-     *  Teil 2 der Bankadresse.
+     * Teil 2 der Bankadresse.
      */
     private String address2;
 
     /**
-     *  Postleitzahl der Bank.
+     * Postleitzahl der Bank.
      */
     private short zipcode;
 
 
     private int bankCode;
-
 
 
     // Field with initializer and methods
@@ -70,9 +66,8 @@ public class Bank {
             customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 9", "0221-95555", CustomerTyp.BUSINESSCUSTOMER, "example9@whatever.com", "Consulting dDd", new Counterpart("Jack", "Nobody", "0221-145555")));
             customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 10", "0221-105555", CustomerTyp.BUSINESSCUSTOMER, "example10@whatever.com", "Consulting eEe", new Counterpart("Michael", "Nobody", "0221-155555")));
 
-        }
-        catch (ParseException e) {
-            JOptionPane.showMessageDialog(new Frame(), e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -97,45 +92,15 @@ public class Bank {
     /**
      *
      */
-    public boolean printAllAccounts() {
-        boolean returnVal = false;
+    public List<Account> getAllAccounts() {
+        List<Account> accounts = new ArrayList<Account>();
+
         for (Customer INDEX : this.customerList) {
             if (INDEX.getAccountSize() > 0) {
-                returnVal = true;
-                INDEX.printAccounts();
+                accounts.addAll(INDEX.getAccounts());
             }
         }
-        return returnVal;
-    }
-
-    /**
-     *
-     */
-    public void printBuisnessCustomer(List<Customer> cList) {
-        StringBuilder sb = new StringBuilder();
-        Formatter formatter = new Formatter(sb);
-
-        for (Customer index : cList) {
-            if (index instanceof BusinessCustomer)
-                formatter.format("%3d %11s %17s %21s %n", index.getCustomerId(), ((BusinessCustomer) index).getCompanyName(), ((BusinessCustomer) index).getContact().getFirstName(), ((BusinessCustomer) index).getContact().getFirstName());
-        }
-        System.out.printf("Übersicht Firmenkunden:%n| %1s | %10s | %14s |%n", "ID", "Firmenname", "Ansprechpartner Vor- Nachname");
-        System.out.println(sb);
-    }
-
-    /**
-     *
-     */
-    public void printPrivateCustomer(List<Customer> cList) {
-        StringBuilder sb = new StringBuilder();
-        Formatter formatter = new Formatter(sb);
-
-        for (Customer index : cList) {
-            if (index instanceof PrivateCustomer)
-                formatter.format("%3d %11s %17s %n", index.getCustomerId(), ((PrivateCustomer) index).getFirstName(), ((PrivateCustomer) index).getLastname() );
-        }
-        System.out.printf("Übersicht Privatkunden:%n| %1s | %10s | %14s |%n", "ID", "Vorname", "Nachname");
-        System.out.println(sb);
+        return accounts;
     }
 
     /**
@@ -143,10 +108,10 @@ public class Bank {
      */
     public boolean setAccount(int id, Account acc) {
         for (Customer index : customerList) {
-            if(index instanceof PrivateCustomer) {
+            if (index instanceof PrivateCustomer) {
                 if (index.getCustomerId() == id) return index.addAccount(acc);
             }
-            if(index instanceof BusinessCustomer) {
+            if (index instanceof BusinessCustomer) {
                 if (index.getCustomerId() == id) return index.addAccount(acc);
             }
         }
@@ -156,56 +121,48 @@ public class Bank {
     /**
      *
      */
-    public boolean searchCustomer(String option) {
-        System.out.println("\n - Kundensuche wird initialisiert - \n");
-        int id;
-        String name;
-        if (option.equalsIgnoreCase("byID")) id = Input.readInt("\n Geben Sie bitte die KdNr ein: ");
-        else
-            {
-                name = Input.readString("\n Geben Sie bitte den Namen ein: ");
-                for (Customer INDEX : customerList) {
-                    if (INDEX instanceof PrivateCustomer)
-                        if (((PrivateCustomer) INDEX).getLastname().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
-                    if (INDEX instanceof BusinessCustomer)
-                        if (((BusinessCustomer) INDEX).getCompanyName().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
+    public List<Account> searchCustomer(int id, String name) {
+        if (name != null) {
+            for (Customer INDEX : customerList) {
+                if (INDEX instanceof PrivateCustomer)
+                    if (((PrivateCustomer) INDEX).getLastname().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
+                if (INDEX instanceof BusinessCustomer)
+                    if (((BusinessCustomer) INDEX).getCompanyName().equalsIgnoreCase(name)) id = INDEX.getCustomerId();
+                else
+                    return null;
             }
-            return false;
         }
+
         for (Customer INDEX : customerList) {
             if (INDEX instanceof PrivateCustomer) {
                 if (INDEX.getCustomerId() == id) {
                     System.out.println("\n " + ((PrivateCustomer) INDEX).getFirstName() + " - " + ((PrivateCustomer) INDEX).getLastname());
-                    INDEX.printAccounts();
-                    return true;
+                    return INDEX.getAccounts();
                 }
             }
             if (INDEX instanceof BusinessCustomer) {
                 if (INDEX.getCustomerId() == id) {
                     System.out.println("\n " + ((BusinessCustomer) INDEX).getCompanyName());
-                    INDEX.printAccounts();
-                    return true;
+                    return INDEX.getAccounts();
                 }
             }
         }
-        return false;
+        return null;
     }
 
     /**
      *
      */
-    public boolean searchAccount() {
-        long iban = Input.readLong("\n Geben Sie bitte die IBAN ein: ");
+    public Account searchAccount(long iban) {
         for (Customer index : customerList) {
             List<Account> accList = index.getAccounts();
             for (Account pointer : accList) {
-                if(pointer.getAccountNumber() == iban) {
-                    System.out.println("\n IBAN: " + pointer.getAccountNumber() + " Kontostand: " + pointer.getAccountBalance());
-                    return true;
+                if (pointer.getAccountNumber() == iban) {
+                    return pointer;
                 }
             }
         }
-        return false;
+        return null;
     }
 
 
@@ -225,11 +182,11 @@ public class Bank {
     // Singleton constructor
 
     /**
-     *  Anwendung des singleton Muster, um zu gewährleiten
-     *  das es nur eine Instanz dieses Objektes gibt.
+     * Anwendung des singleton Muster, um zu gewährleiten
+     * das es nur eine Instanz dieses Objektes gibt.
      */
     private Bank() {
-        this.name ="Alteingesessene Berliner Bank";
+        this.name = "Alteingesessene Berliner Bank";
         this.identifierCode = "DEUT DEDB 110";
         this.address1 = "Breite Straße";
         this.address2 = "33-34";
@@ -238,20 +195,19 @@ public class Bank {
     }
 
     /**
-     *  Statische erzeugung der Bank Instanz.
+     * Statische erzeugung der Bank Instanz.
      */
     private static Bank ourInstance = new Bank();
 
     /**
-     *  Die statische Methode gibt die Referrenz
-     *  auf die singleton Instanz zurueck.
+     * Die statische Methode gibt die Referrenz
+     * auf die singleton Instanz zurueck.
      *
-     * @return  Die Referrenz auf die Bank Instanz.
+     * @return Die Referrenz auf die Bank Instanz.
      */
     public static Bank getInstance() {
         return ourInstance;
     }
-
 
 
 }

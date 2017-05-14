@@ -5,6 +5,12 @@ import java.util.List;
 
 public abstract class Customer {
 
+    /**
+     *
+     */
+    public static short ID = 1;
+
+
     //  Attributes
 
     /**
@@ -32,6 +38,11 @@ public abstract class Customer {
      */
     private String email = null;
 
+    /**
+     *
+     */
+    private final List<Account> accountsList = new ArrayList<Account>(10);
+
 
     //  Getter
 
@@ -43,20 +54,8 @@ public abstract class Customer {
     }
 
 
-    //  Static attributes
 
-    /**
-     *
-     */
-    public static short ID = 1;
-
-
-    //  Field with methods
-
-    /**
-     *
-     */
-    private final List<Account> accountsList = new ArrayList<Account>(10);
+    //  Methods
 
     /**
      *
@@ -77,15 +76,6 @@ public abstract class Customer {
      */
     public List<Account> getAccounts() {
         return this.accountsList;
-    }
-
-    /**
-     *
-     */
-    public void printAccounts() {
-        for (Account index : this.accountsList) {
-            System.out.println(index.toString());
-        }
     }
 
 
