@@ -32,7 +32,7 @@ public class Transaction {
         return  " Zeitpunkt: " + this.timestamp + "\n" +
                 " Transaktionstyp: " + this.transType + "\n" +
                 " Betrag: " + this.amount + "\n" +
-                " Beschreibung: '" + this.description + '}';
+                " Beschreibung: '" + this.description;
     }
 
     public Transaction(Date timestamp, TransactionType transType, String description, double amount) {

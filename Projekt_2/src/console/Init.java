@@ -197,6 +197,7 @@ final class Output {
         for (Transaction index : transList) {
             System.out.println(index.toString());
         }
+        System.out.println("\n");
     }
 
 
@@ -208,7 +209,7 @@ final class Output {
 
 final class Input {
 
-    private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", 2);
+    private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
 
     /**
      *
@@ -396,13 +397,13 @@ final class Input {
      * @param transType
      */
     public static void createTransaction(Bank bank, String title, TransactionType transType) {
-        System.out.println("\n ----- " + title + " ----- \n\n");
+        System.out.println("\n ----- " + title + " ----- \n");
         long iban = 0L;
 
         do {
             try {
-                if((iban = Utility.readLong("\n Eingabe IBAN: ")) == -1L) {
-                    throw new WrongInputException("Fehlerhafte IBAN, die Eingabe wird neu gestartet!");
+                if((iban = Utility.readLong(" Eingabe IBAN: ")) == -1L) {
+                    throw new WrongInputException(" Fehlerhafte IBAN, die Eingabe wird neu gestartet!");
                 }
             } catch (WrongInputException var9) {
                 JOptionPane.showMessageDialog(new Frame(), var9.getMessage(), "Benutzereingabe Eingabe", 0);
@@ -427,12 +428,12 @@ final class Input {
             } while(!checkInput());
 
             if (account.addTransaction(new Transaction(new Date(), transType, description, amount))) {
-                System.out.println(" Die Transanktion wurde erfogrich ausgeführt!");
+                System.out.println(" Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }
 
         }
-        System.out.println(" Das Konto: " + iban + " existiert nicht!");
+        System.out.println(" Das Konto: " + iban + " existiert nicht!\n\n");
     }
 
     /**
