@@ -26,6 +26,9 @@ public class Transaction {
         return amount;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
     @Override
     public String toString() {
@@ -35,7 +38,7 @@ public class Transaction {
                 " Beschreibung: '" + this.description;
     }
 
-    public Transaction(Date timestamp, TransactionType transType, String description, double amount) {
+    public Transaction(Date timestamp, TransactionType transType, double amount, String description) {
         this.timestamp = timestamp;
         this.transType = transType;
         this.description = description;

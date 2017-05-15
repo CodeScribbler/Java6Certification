@@ -19,7 +19,7 @@ public class Account {
     /**
      *
      */
-    public static long ledgerNumber = 1000;
+    public static long IBAN = 1000;
 
 
 

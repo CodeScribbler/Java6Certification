@@ -2,12 +2,11 @@ package console;
 
 import model.*;
 import model.Transaction.TransactionType;
-import java.util.Formatter;
-import java.util.List;
+
+import java.io.File;
+import java.util.*;
 import java.awt.Frame;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -101,12 +100,15 @@ final class Output {
 
                 }
                 case 13: {
-                    Output.printTransaction(bank, "DSC");
+                    if (bank.createCsvFile(Input.readCsvInfo(Input.transMenuSave)))
+                        System.out.println("\n Die CSV-Datei wurde erfolgreich erstellt!\n");
+                    else
+                        System.out.println("\n Das angegebene Verzeichnis existiert nicht!\n");
                     break;
 
                 }
                 case 14: {
-
+                    bank.readCsvFile(bank, Input.readCsvInfo(Input.transMenuLoad));
                     break;
 
                 }
@@ -209,14 +211,19 @@ final class Output {
 
 final class Input {
 
+    protected static final String[] transMenuSave = { "\n\n ----- Transaktionen speichern ----- \n\n" + "(1) Speichern unter C:\\\n"+ "(2) Speichern unter Desktop\n" + "(3) Speicherort selbst auswählen\n" + "(4) Abbrechen\n" };
+
+    protected static final String[] transMenuLoad = { "\n\n ----- Transaktionen einlesen ----- \n\n" + "(1) Einlesen unter C:\\\n" + "(2) Einlesen unter Desktop\n" + "(3) Verzeichnis selbst auswählen\n" + "(4) Abbrechen\n" };
+
     private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
+
 
     /**
      *
      * @param bank
      * @param option
      */
-    public static void search(Bank bank, String option) {
+    protected static void search(Bank bank, String option) {
         ArrayList<Account> list = new ArrayList<Account>();
 
         System.out.println("\n - Kundensuche wird initialisiert - \n");
@@ -254,7 +261,7 @@ final class Input {
      * @param prompt
      * @return
      */
-    private static String validateEmail(String prompt) {
+    protected static String validateEmail(String prompt) {
         String email = Utility.readString(prompt);
         Matcher matcher = VALID_EMAIL.matcher(email);
         return matcher.find()?email:null;
@@ -264,7 +271,7 @@ final class Input {
      *
      * @param bank
      */
-    public static void createBuisnessCustomer(Bank bank) {
+    protected static void createBuisnessCustomer(Bank bank) {
         System.out.println("\n - Buisness Kundenanlegung wird initialisiert - \n");
 
         String companyName;
@@ -317,7 +324,7 @@ final class Input {
      *
      * @param bank
      */
-    public static void createPrivateCustomer(Bank bank) {
+    protected static void createPrivateCustomer(Bank bank) {
         Date birthdate = null;
         System.out.println("\n - Private Kundenanlegung wird initialisiert - \n");
 
@@ -369,7 +376,7 @@ final class Input {
      *
      * @param bank
      */
-    public static void createAccount(Bank bank) {
+    protected static void createAccount(Bank bank) {
         System.out.println("\n - Kontoanlegung wird initialisiert - \n");
 
         double accountBalance;
@@ -377,7 +384,7 @@ final class Input {
             accountBalance = Utility.readDouble(" Geben Sie bitte den Kontostand ein: ");
         } while(!checkInput());
 
-        Account acc = new Account(Account.ledgerNumber++, accountBalance);
+        Account acc = new Account(Account.IBAN++, accountBalance);
         Output.printPrivateCustomer(bank.getSortedCustomerList(false));
         Output.printBuisnessCustomer(bank.getSortedCustomerList(false));
 
@@ -396,7 +403,7 @@ final class Input {
      * @param title
      * @param transType
      */
-    public static void createTransaction(Bank bank, String title, TransactionType transType) {
+    protected static void createTransaction(Bank bank, String title, TransactionType transType) {
         System.out.println("\n ----- " + title + " ----- \n");
         long iban = 0L;
 
@@ -427,7 +434,7 @@ final class Input {
                 description = Utility.readString(" Eingabe Bescheibung: ");
             } while(!checkInput());
 
-            if (account.addTransaction(new Transaction(new Date(), transType, description, amount))) {
+            if (account.addTransaction(new Transaction(Utility.getDate(null), transType, amount, description))) {
                 System.out.println(" Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }
@@ -440,11 +447,43 @@ final class Input {
      *
      * @return
      */
-    public static boolean checkInput() {
+    protected static boolean checkInput() {
         String input = Utility.readString(" Bestätigung der Eingabe mit Ja oder Nein: ");
         return input != null && input.equalsIgnoreCase("j") || input != null && input.equalsIgnoreCase("ja");
     }
 
+
+    protected static String readCsvInfo(String[] options) {
+        String path;
+        int chioce;
+
+        System.out.println(Arrays.toString(options));
+
+        do {
+            chioce = Utility.readInt("Auswahl: ");
+
+            switch (chioce) {
+                case 1:
+                    return "C:\\Kontoverwaltung_TRANSAKTIONEN.csv";
+
+                case 2:
+                    return "C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\Kontoverwaltung_TRANSAKTIONEN.csv";
+
+                case 3:
+                    path = Utility.readString("Eingabe Verzeichnis: ");
+                    if (path != null) {
+                        File file = new File(path);
+                        if (file.exists()) return path;
+                    }
+                    System.err.println(" Fehlerhafte Benutzereingabe!\n");
+                    break;
+            }
+        } while (chioce != 4);
+        return null;
+    }
+
+
     private Input() {
     }
+
 }
