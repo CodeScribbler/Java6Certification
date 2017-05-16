@@ -21,7 +21,7 @@ public class Exercise extends Thread {
         }
     }
 
-    public static void main(String[] args) {k
+    public static void main(String[] args) {
         StringBuffer sb = new StringBuffer("A");
 
         new Exercise(sb).start();
