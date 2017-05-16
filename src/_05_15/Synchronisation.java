@@ -39,7 +39,7 @@ public class Synchronisation implements Runnable {
             System.out.println(Thread.currentThread().getName() + " completes the withdrawal");
         }
         else
-            System.out.println(Thread.currentThread().getName() + " got nothing!");
+            System.out.println(Thread.currentThread().getName() + " Balance: " + acct.getBalance());
     }
 }
 
