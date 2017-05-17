@@ -3,6 +3,8 @@ package model;
 import java.io.*;
 import java.util.*;
 
+import model.Account.Transaction;
+
 
 /**
  * Die Klasse Bank beinhaltet neben der Adresse
@@ -76,20 +78,17 @@ public class Bank {
     private List<Customer> customerList = new ArrayList<Customer>();
 
     {
-        Customer obj;
+        customerList.add(new PrivateCustomer("MusterStraße 1", "0221-15555", CustomerTyp.PRIVATECUSTOMER, "example1@whatever.com", "Max", "Mustermann", Utility.getDate(null)));
+        customerList.add(new PrivateCustomer("MusterStraße 2", "0221-25555", CustomerTyp.PRIVATECUSTOMER, "example2@whatever.com", "Diana", "Musterfrau", Utility.getDate(null)));
+        customerList.add(new PrivateCustomer("MusterStraße 3", "0221-35555", CustomerTyp.PRIVATECUSTOMER, "example3@whatever.com", "Reiner", "Mustermann", Utility.getDate(null)));
+        customerList.add(new PrivateCustomer("MusterStraße 4", "0221-45555", CustomerTyp.PRIVATECUSTOMER, "example4@whatever.com", "Sabrina", "Musterfrau", Utility.getDate(null)));
+        customerList.add(new PrivateCustomer("MusterStraße 5", "0221-55555", CustomerTyp.PRIVATECUSTOMER, "example5@whatever.com", "Dirk", "Mustermann", Utility.getDate(null)));
 
-        customerList.add(obj = new PrivateCustomer(Customer.ID++, "MusterStraße 1", "0221-15555", CustomerTyp.PRIVATECUSTOMER, "example1@whatever.com", "Max", "Mustermann", Utility.getDate(null)));
-        customerList.add(obj = new PrivateCustomer(Customer.ID++, "MusterStraße 2", "0221-25555", CustomerTyp.PRIVATECUSTOMER, "example2@whatever.com", "Diana", "Musterfrau", Utility.getDate(null)));
-        customerList.add(obj = new PrivateCustomer(Customer.ID++, "MusterStraße 3", "0221-35555", CustomerTyp.PRIVATECUSTOMER, "example3@whatever.com", "Reiner", "Mustermann", Utility.getDate(null)));
-        customerList.add(obj = new PrivateCustomer(Customer.ID++, "MusterStraße 4", "0221-45555", CustomerTyp.PRIVATECUSTOMER, "example4@whatever.com", "Sabrina", "Musterfrau", Utility.getDate(null)));
-        customerList.add(obj = new PrivateCustomer(Customer.ID++, "MusterStraße 5", "0221-55555", CustomerTyp.PRIVATECUSTOMER, "example5@whatever.com", "Dirk", "Mustermann", Utility.getDate(null)));
-
-        customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 6", "0221-65555", CustomerTyp.BUSINESSCUSTOMER, "example6@whatever.com", "Consulting aAa", new Counterpart("Dave", "Nobody", "0221-115555")));
-        customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 7", "0221-75555", CustomerTyp.BUSINESSCUSTOMER, "example7@whatever.com", "Consulting bBb", new Counterpart("Chris", "Nobody", "0221-125555")));
-        customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 8", "0221-85555", CustomerTyp.BUSINESSCUSTOMER, "example8@whatever.com", "Consulting cCc", new Counterpart("Darrel", "Nobody", "0221-135555")));
-        customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 9", "0221-95555", CustomerTyp.BUSINESSCUSTOMER, "example9@whatever.com", "Consulting dDd", new Counterpart("Jack", "Nobody", "0221-145555")));
-        customerList.add(obj = new BusinessCustomer(Customer.ID++, "MusterStraße 10", "0221-105555", CustomerTyp.BUSINESSCUSTOMER, "example10@whatever.com", "Consulting eEe", new Counterpart("Michael", "Nobody", "0221-155555")));
-
+        customerList.add(new BusinessCustomer("MusterStraße 6", "0221-65555", CustomerTyp.BUSINESSCUSTOMER, "example6@whatever.com", "Consulting aAa", new Counterpart("Dave", "Nobody", "0221-115555")));
+        customerList.add(new BusinessCustomer("MusterStraße 7", "0221-75555", CustomerTyp.BUSINESSCUSTOMER, "example7@whatever.com", "Consulting bBb", new Counterpart("Chris", "Nobody", "0221-125555")));
+        customerList.add(new BusinessCustomer("MusterStraße 8", "0221-85555", CustomerTyp.BUSINESSCUSTOMER, "example8@whatever.com", "Consulting cCc", new Counterpart("Darrel", "Nobody", "0221-135555")));
+        customerList.add(new BusinessCustomer("MusterStraße 9", "0221-95555", CustomerTyp.BUSINESSCUSTOMER, "example9@whatever.com", "Consulting dDd", new Counterpart("Jack", "Nobody", "0221-145555")));
+        customerList.add(new BusinessCustomer("MusterStraße 10", "0221-105555", CustomerTyp.BUSINESSCUSTOMER, "example10@whatever.com", "Consulting eEe", new Counterpart("Michael", "Nobody", "0221-155555")));
     }
 
     /**
@@ -127,13 +126,13 @@ public class Bank {
     /**
      *
      */
-    public boolean setAccount(int id, Account acc) {
+    public boolean setAccount(String id, Account acc) {
         for (Customer index : customerList) {
             if (index instanceof PrivateCustomer) {
-                if (index.getCustomerId() == id) return index.addAccount(acc);
+                if (index.getCustomerId().equals(id)) return index.addAccount(acc);
             }
             if (index instanceof BusinessCustomer) {
-                if (index.getCustomerId() == id) return index.addAccount(acc);
+                if (index.getCustomerId().equals(id)) return index.addAccount(acc);
             }
         }
         return false;
@@ -142,7 +141,7 @@ public class Bank {
     /**
      *
      */
-    public List<Account> searchCustomer(int id, String name) {
+    public List<Account> searchCustomer(String id, String name) {
         if (name != null) {
             for (Customer INDEX : customerList) {
                 if (INDEX instanceof PrivateCustomer)
@@ -156,13 +155,13 @@ public class Bank {
 
         for (Customer INDEX : customerList) {
             if (INDEX instanceof PrivateCustomer) {
-                if (INDEX.getCustomerId() == id) {
+                if (INDEX.getCustomerId().equals(id)) {
                     System.out.println("\n " + ((PrivateCustomer) INDEX).getFirstName() + " - " + ((PrivateCustomer) INDEX).getLastname());
                     return INDEX.getAccounts();
                 }
             }
             if (INDEX instanceof BusinessCustomer) {
-                if (INDEX.getCustomerId() == id) {
+                if (INDEX.getCustomerId().equals(id)) {
                     System.out.println("\n " + ((BusinessCustomer) INDEX).getCompanyName());
                     return INDEX.getAccounts();
                 }
@@ -189,55 +188,53 @@ public class Bank {
 
     public boolean createCsvFile(String path) {
         File file = new File(path);
+        BufferedWriter fWriter = null;
 
-        if (file.exists()) {
-            BufferedWriter fWriter = null;
-            List<Account> accountList = new ArrayList<Account>(getAllAccounts());
-            List<Long> ibanList = new ArrayList<Long>();
-            List<Transaction> transList = new ArrayList<Transaction>();
+        List<Account> accountList = new ArrayList<Account>(getAllAccounts());
+        List<Long> ibanList = new ArrayList<Long>();
+        List<Transaction> transList = new ArrayList<Transaction>();
 
-            for (Account index : accountList) {
-                ibanList.add(index.getAccountNumber());
-                transList.addAll(index.getSortedTransList("ASC"));
-            }
+        for (Account index : accountList) {
+            ibanList.add(index.getAccountNumber());
+            transList.addAll(index.getSortedTransList("ASC"));
+        }
 
-            // File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\TRANSAKTIONEN.csv");
+        // File file = new File("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\TRANSAKTIONEN.csv");
 
-            try {
-                fWriter = new BufferedWriter(new FileWriter(file));
+        try {
+            fWriter = new BufferedWriter(new FileWriter(file));
 
-                String fileHeader = "IBAN; Zeitstempel; Transaktionsart; Beschreibungstext; Betrag;";
-                fWriter.write(fileHeader);
-                fWriter.write("\n");
+            String fileHeader = "IBAN, Zeitstempel, Transaktionsart, Beschreibungstext, Betrag";
+            fWriter.append(fileHeader);
+            fWriter.append("\n");
 
-                for (Long iban : ibanList) {
-                    fWriter.append(String.valueOf(iban));
-                    for (Transaction index : transList) {
-                        fWriter.append(String.valueOf(index.getTimestamp()));
-                        fWriter.append(";");
-                        if (index.getTransType() == Transaction.TransactionType.DESPOSIT)
-                            fWriter.append("Einzahlung;");
-                        if (index.getTransType() == Transaction.TransactionType.DISBURSEMENT)
-                            fWriter.append("Auszahlung;");
-                        fWriter.append(index.getDescription());
-                        fWriter.append(";");
-                        fWriter.append(String.valueOf(index.getAmount()));
-                        fWriter.append("\n");
-                        continue;
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                System.err.println(e.getMessage());
-            } catch (IOException e) {
-                System.err.println(e.getMessage());
-            } finally {
-                if (fWriter != null) try {
-                    fWriter.close();
-                } catch (IOException e) {
-                    System.err.println(e.getMessage());
+            for (Long iban : ibanList) {
+                fWriter.append(String.valueOf(iban));
+                for (Transaction index : transList) {
+                    fWriter.append(String.valueOf(index.getTimestamp()));
+                    fWriter.append(";");
+                    if (index.getTransType() == TransactionType.DESPOSIT)
+                        fWriter.append("Einzahlung;");
+                    if (index.getTransType() == TransactionType.DISBURSEMENT)
+                        fWriter.append("Auszahlung;");
+                    fWriter.append(index.getDescription());
+                    fWriter.append(";");
+                    fWriter.append(String.valueOf(index.getAmount()));
+                    fWriter.append("\n");
+                    break;
                 }
             }
             return true;
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } finally {
+            if (fWriter != null) try {
+                fWriter.close();
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
         }
         return false;
     }
@@ -267,18 +264,19 @@ public class Bank {
                         for (Account index : accountList) {
                             if (String.valueOf(index.getAccountNumber()).equals(tokens[IBAN])) {
 
-                            Transaction transaction = new Transaction(Utility.getDate(tokens[TIMESTAMP]),
-                                    ((tokens[TRANSACTIONTYPE]).equalsIgnoreCase("Einzahlen") ? Transaction.TransactionType.DESPOSIT : Transaction.TransactionType.DISBURSEMENT),
-                                    Double.parseDouble(tokens[AMOUNT]),
-                                    tokens[DESCRIPTION]);
+                                Account acc = new Account();
+                                Transaction transaction = acc.new Transaction(Utility.getDate(tokens[TIMESTAMP]),
+                                        ((tokens[TRANSACTIONTYPE]).equalsIgnoreCase("Einzahlen") ? TransactionType.DESPOSIT : TransactionType.DISBURSEMENT),
+                                        Double.parseDouble(tokens[AMOUNT]),
+                                        tokens[DESCRIPTION]);
 
-                            index.addTransaction(transaction);
+                                index.addTransaction(transaction);
                             }
                         }
                     }
                 }
             } catch (FileNotFoundException e) {
-                System.err.println(e.getMessage());;
+                System.err.println(e.getMessage());
             } catch (IOException e) {
                 System.err.println(e.getMessage());
             }
@@ -294,9 +292,12 @@ public class Bank {
     private final static Comparator<Customer> byId = new Comparator<Customer>() {
         @Override
         public int compare(Customer first, Customer second) {
-            return first.getCustomerId() > second.getCustomerId() ? -1 : first.getCustomerId() < second.getCustomerId() ? +1 : 0;
+            return first.getCustomerId().compareTo(second.getCustomerId());
         }
     };
+
+
+
 
 
     // Singleton constructor

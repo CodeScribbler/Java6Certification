@@ -47,8 +47,8 @@ public class PrivateCustomer extends Customer {
     /**
      *
      */
-    public PrivateCustomer(int customerId, String address, String phoneNumber, CustomerTyp profile, String email, String firstName, String lastname, Date birthdate) {
-        super(customerId, address, phoneNumber, profile, email);
+    public PrivateCustomer(String address, String phoneNumber, CustomerTyp profile, String email, String firstName, String lastname, Date birthdate) {
+        super(address, phoneNumber, profile, email);
         this.firstName = firstName;
         this.lastname = lastname;
         this.birthdate = birthdate;

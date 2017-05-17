@@ -5,43 +5,42 @@ import java.util.List;
 
 public abstract class Customer {
 
-    /**
-     *
-     */
-    public static short ID = 1;
-
-
     //  Attributes
 
     /**
      *
      */
-    private int customerId = 0;
+    private String customerId;
 
     /**
      *
      */
-    private String address = null;
+    private String address;
 
     /**
      *
      */
-    private String phoneNumber = null;
+    private String phoneNumber;
 
     /**
      *
      */
-    private CustomerTyp profile = null;
+    private CustomerTyp profile;
 
     /**
      *
      */
-    private String email = null;
+    private String email;
+
 
     /**
      *
      */
     private final List<Account> accountsList = new ArrayList<Account>(10);
+
+//    {
+//        accountsList.add(new Account(1000, 1500));
+//    }
 
 
     //  Getter
@@ -49,7 +48,7 @@ public abstract class Customer {
     /**
      *
      */
-    public int getCustomerId() {
+    public String getCustomerId() {
         return this.customerId;
     }
 
@@ -84,8 +83,8 @@ public abstract class Customer {
     /**
      *
      */
-    public Customer(int customerId, String address, String phoneNumber, CustomerTyp profile, String email) {
-        this.customerId = customerId;
+    public Customer(String address, String phoneNumber, CustomerTyp profile, String email) {
+        this.customerId = CustomerNumberGenerator.getInstance().getNumber();
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.profile = profile;

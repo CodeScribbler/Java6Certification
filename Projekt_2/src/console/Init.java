@@ -1,7 +1,7 @@
 package console;
 
 import model.*;
-import model.Transaction.TransactionType;
+import model.Account.Transaction;
 
 import java.io.File;
 import java.util.*;
@@ -23,7 +23,6 @@ public class Init {
 }
 
 
-
 final class Output {
 
     /**
@@ -38,7 +37,7 @@ final class Output {
             choice = Utility.readByte("\n Auswahl: ");
 
 
-            switch(choice) {
+            switch (choice) {
                 case 1: {
                     Input.createPrivateCustomer(bank);
                     break;
@@ -78,19 +77,19 @@ final class Output {
                     break;
                 }
                 case 9: {
-                    if(bank.getAllAccounts() != null)
+                    if (bank.getAllAccounts() != null)
                         Output.printCustomerAccounts(bank.getAllAccounts());
                     else
                         System.out.println("\n\n Es existieren aktuell keine Konten zur Ausgabe!\n\n");
                     break;
                 }
                 case 10: {
-                    Input.createTransaction(bank, "Geld einzahlen",  Transaction.TransactionType.DESPOSIT);
+                    Input.createTransaction(bank, "Geld einzahlen", TransactionType.DESPOSIT);
                     break;
 
                 }
                 case 11: {
-                    Input.createTransaction(bank, "Geld auszahlen", Transaction.TransactionType.DISBURSEMENT);
+                    Input.createTransaction(bank, "Geld auszahlen", TransactionType.DISBURSEMENT);
                     break;
 
                 }
@@ -100,7 +99,7 @@ final class Output {
 
                 }
                 case 13: {
-                    if (bank.createCsvFile(Input.readCsvInfo(Input.transMenuSave)))
+                    if (bank.createCsvFile(Input.readCsvInfo(bank, Input.transMenuSave)))
                         System.out.println("\n Die CSV-Datei wurde erfolgreich erstellt!\n");
                     else
                         System.out.println("\n Das angegebene Verzeichnis existiert nicht!\n");
@@ -108,12 +107,12 @@ final class Output {
 
                 }
                 case 14: {
-                    bank.readCsvFile(bank, Input.readCsvInfo(Input.transMenuLoad));
+                    bank.readCsvFile(bank, Input.readCsvInfo(bank, Input.transMenuLoad));
                     break;
 
                 }
             }
-        } while(choice != 15);
+        } while (choice != 15);
 
     }
 
@@ -158,12 +157,10 @@ final class Output {
 
         for (Customer index : cList) {
             if (index instanceof BusinessCustomer)
-                formatter.format("%3d %11s %17s %21s %n", index.getCustomerId(),
-                        ((BusinessCustomer) index).getCompanyName(),
-                        ((BusinessCustomer) index).getContact().getFirstName(),
-                        ((BusinessCustomer) index).getContact().getFirstName());
+                formatter.format("%18s %17s %19s %16s %n", index.getCustomerId(), ((BusinessCustomer) index).getCompanyName(), ((BusinessCustomer) index).getContact().getFirstName(), ((BusinessCustomer) index).getContact().getLastname());
         }
-        System.out.printf("Übersicht Firmenkunden:%n| %1s | %10s | %14s |%n", "ID", "Firmenname", "Ansprechpartner Vor- Nachname");
+        System.out.printf("\n Übersicht Firmenkunden:%n%n %8s %5s %4s %14s %5s %5s %3s %n", "|", "ID", "|", "Firmenname", "|", "Ansprechpartner Vor- Nachname", "|");
+        Output.printSeparator(68, 67);
         System.out.println(sb);
     }
 
@@ -177,9 +174,10 @@ final class Output {
 
         for (Customer index : cList) {
             if (index instanceof PrivateCustomer)
-                formatter.format("%3d %11s %17s %n", index.getCustomerId(), ((PrivateCustomer) index).getFirstName(), ((PrivateCustomer) index).getLastname());
+                formatter.format("%18s %11s %16s %n", index.getCustomerId(), ((PrivateCustomer) index).getFirstName(), ((PrivateCustomer) index).getLastname());
         }
-        System.out.printf("Übersicht Privatkunden:%n| %1s | %10s | %14s |%n", "ID", "Vorname", "Nachname");
+        System.out.printf("\n Übersicht Privatkunden:%n%n %8s %5s %4s %10s %3s %10s %3s %n", "|", "ID", "|", "Vorname", "|", "Nachname", "|");
+        Output.printSeparator(44, 43);
         System.out.println(sb);
     }
 
@@ -189,42 +187,53 @@ final class Output {
      */
     private static void printTransaction(Bank bank, String option) {
         List<Account> accList = new ArrayList<Account>();
-        List<Transaction> transList = new ArrayList<Transaction>();
+        List <Transaction> transList = new ArrayList<Transaction>();
 
         accList.addAll(bank.getAllAccounts());
 
         if (accList.isEmpty()) {
-            System.out.println(" Aktuell gibt es keine Transaktionen zum ausgeben!\n");
+            System.out.println("\n Aktuell sind keine Transaktionen vorhanden!\n");
             return;
         }
 
         for (Account index : accList) {
             transList.addAll(index.getSortedTransList(option));
         }
-        for (Transaction index : transList) {
+
+        for (Object index : transList) {
             System.out.println(index.toString());
         }
         System.out.println("\n");
     }
 
 
-    private Output() {}
+    private static void printSeparator(int count, int eof) {
+        for (int i = 0; i < count; i++) {
+            if (i > 1)
+                System.out.print("-");
+            else
+                System.out.print("\t");
+            if (i == eof)
+                System.out.print("\n");}
+    }
+
+
+    private Output() {
+    }
 
 }
 
 
-
 final class Input {
 
-    protected static final String[] transMenuSave = { "\n\n ----- Transaktionen speichern ----- \n\n", "(1) Speichern unter C:\\", "(2) Speichern unter Desktop", "(3) Speicherort selbst auswählen", "(4) Abbrechen" };
+    protected static final String[] transMenuSave = {"\n\n ----- Transaktionen speichern ----- \n\n", "(1) Speichern unter C:\\", "(2) Speichern unter Desktop", "(3) Speicherort selbst auswählen", "(4) Abbrechen"};
 
-    protected static final String[] transMenuLoad = { "\n\n ----- Transaktionen einlesen ----- \n\n", "(1) Einlesen unter C:\\", "(2) Einlesen unter Desktop", "(3) Verzeichnis selbst auswählen", "(4) Abbrechen" };
+    protected static final String[] transMenuLoad = {"\n\n ----- Transaktionen einlesen ----- \n\n", "(1) Einlesen unter C:\\", "(2) Einlesen unter Desktop", "(3) Verzeichnis selbst auswählen", "(4) Abbrechen"};
 
     private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
 
 
     /**
-     *
      * @param bank
      * @param option
      */
@@ -232,26 +241,26 @@ final class Input {
         ArrayList<Account> list = new ArrayList<Account>();
 
         System.out.println("\n - Kundensuche wird initialisiert - \n");
-        if(option.equalsIgnoreCase("byID")) {
-            int id;
+        if (option.equalsIgnoreCase("byID")) {
+            String id;
             do {
-                id = Utility.readInt("\n Geben Sie bitte die KdNr ein: ");
-                if(id == -1) {
+                id = Utility.readString("\n Geben Sie bitte die KdNr ein: ");
+                if (id == null) {
                     System.err.println(" Ungültige Eingabe!");
                 }
-            } while(id == -1);
+            } while (id == null);
 
             list.addAll(bank.searchCustomer(id, null));
         } else {
             String name;
             do {
                 name = Utility.readString("\n Geben Sie bitte den Namen ein: ");
-            } while(name == null);
+            } while (name == null);
 
-            list.addAll(bank.searchCustomer(-1, name));
+            list.addAll(bank.searchCustomer(null, name));
         }
 
-        if(list.size() > 0) {
+        if (list.size() > 0) {
             for (Object index : list) {
                 System.out.println(index.toString());
             }
@@ -262,18 +271,16 @@ final class Input {
     }
 
     /**
-     *
      * @param prompt
      * @return
      */
     protected static String validateEmail(String prompt) {
         String email = Utility.readString(prompt);
         Matcher matcher = VALID_EMAIL.matcher(email);
-        return matcher.find()?email:null;
+        return matcher.find() ? email : null;
     }
 
     /**
-     *
      * @param bank
      */
     protected static void createBuisnessCustomer(Bank bank) {
@@ -282,42 +289,42 @@ final class Input {
         String companyName;
         do {
             companyName = Utility.readString("\n Eingabe Firmenname: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String contactFirstname;
         do {
             contactFirstname = Utility.readString("\n Eingabe Ansprechpartner-Vorname: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String contactLastname;
         do {
             contactLastname = Utility.readString("\n Eingabe Ansprechpartner-Nachname: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String contactPhoneNumber;
         do {
             contactPhoneNumber = Utility.readString("\n Eingabe Telefonnummer: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String address;
         do {
             address = Utility.readString("\n Eingabe Adresse: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String phoneNumber;
         do {
             phoneNumber = Utility.readString("\n Geben Sie bitte die Telefonnummer ein: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String email;
         do {
             email = validateEmail("\n Eingabe E-Mail Adresse: ");
-            if(email == null) {
+            if (email == null) {
                 System.out.println(" Ungültige E-Mail-Adresse!\n");
             }
-        } while(email == null || !checkInput());
+        } while (email == null || !checkInput());
 
-        if(bank.addCustomer(new BusinessCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.BUSINESSCUSTOMER, email, companyName, new Counterpart(contactFirstname, contactLastname, contactPhoneNumber)))) {
+        if (bank.addCustomer(new BusinessCustomer(address, phoneNumber, CustomerTyp.BUSINESSCUSTOMER, email, companyName, new Counterpart(contactFirstname, contactLastname, contactPhoneNumber)))) {
             System.out.println("\n\n Der Firmenkunde wurde erfolgreich angelegt!\n\n");
         } else {
             System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
@@ -326,7 +333,6 @@ final class Input {
     }
 
     /**
-     *
      * @param bank
      */
     protected static void createPrivateCustomer(Bank bank) {
@@ -336,30 +342,30 @@ final class Input {
         String firstname;
         do {
             firstname = Utility.readString("\n Eingabe Vorname: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String lastname;
         do {
             lastname = Utility.readString("\n Eingabe Nachname: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String address;
         do {
             address = Utility.readString("\n Eingabe Adresse: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String phoneNumber;
         do {
             phoneNumber = Utility.readString("\n Eingabe Telefonnummer: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         String email;
         do {
             email = validateEmail("\n Eingabe E-Mail Adresse: ");
-            if(email == null) {
+            if (email == null) {
                 System.out.println(" Ungültige E-Mail Adresse!\n");
             }
-        } while(email == null || !checkInput());
+        } while (email == null || !checkInput());
 
         do {
             try {
@@ -367,9 +373,9 @@ final class Input {
             } catch (ParseException var8) {
                 System.err.println(var8.getMessage());
             }
-        } while(birthdate == null || !checkInput());
+        } while (birthdate == null || !checkInput());
 
-        if(bank.addCustomer(new PrivateCustomer(Customer.ID++, address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate))) {
+        if (bank.addCustomer(new PrivateCustomer(address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate))) {
             System.out.println("\n\n Der Privatkunde wurde erfolgreich angelegt!\n\n");
         } else {
             System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
@@ -378,7 +384,6 @@ final class Input {
     }
 
     /**
-     *
      * @param bank
      */
     protected static void createAccount(Bank bank) {
@@ -387,15 +392,15 @@ final class Input {
         double accountBalance;
         do {
             accountBalance = Utility.readDouble(" Geben Sie bitte den Kontostand ein: ");
-        } while(!checkInput());
+        } while (!checkInput());
 
         Account acc = new Account(Account.IBAN++, accountBalance);
         Output.printPrivateCustomer(bank.getSortedCustomerList(false));
         Output.printBuisnessCustomer(bank.getSortedCustomerList(false));
 
-        int choice = Utility.readInt("\n Zugehöriges Konto, Eingabe Kundennr: ");
+        String choice = Utility.readString("\n Zugehöriges Konto, Eingabe Kundennr: ");
 
-        if(bank.setAccount(choice, acc)) {
+        if (bank.setAccount(choice, acc)) {
             System.out.println("\n\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n\n");
         } else {
             System.out.println("\n\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
@@ -403,7 +408,6 @@ final class Input {
     }
 
     /**
-     *
      * @param bank
      * @param title
      * @param transType
@@ -414,32 +418,32 @@ final class Input {
 
         do {
             try {
-                if((iban = Utility.readLong(" Eingabe IBAN: ")) == -1L) {
+                if ((iban = Utility.readLong(" Eingabe IBAN: ")) == -1L) {
                     throw new WrongInputException(" Fehlerhafte IBAN, die Eingabe wird neu gestartet!");
                 }
             } catch (WrongInputException var9) {
                 JOptionPane.showMessageDialog(new Frame(), var9.getMessage(), "Benutzereingabe Eingabe", 0);
             }
-        } while(iban == -1L);
+        } while (iban == -1L);
 
         Account account = bank.searchAccount(iban);
 
-        if(account != null) {
+        if (account != null) {
             double amount;
             do {
                 amount = Utility.readDouble(" Eingabe Betrag: ");
-                if(transType == TransactionType.DISBURSEMENT && account.getAccountBalance() - amount < 0.0D) {
+                if (transType == TransactionType.DISBURSEMENT && account.getAccountBalance() - amount < 0.0D) {
                     System.out.println(" Das Konto ist nicht ausreichend gedeckt!\n");
                     amount = 0.0D;
                 }
-            } while(amount == 0.0D && !checkInput());
+            } while (amount == 0.0D && !checkInput());
 
             String description;
             do {
                 description = Utility.readString(" Eingabe Bescheibung: ");
-            } while(!checkInput());
+            } while (!checkInput());
 
-            if (account.addTransaction(new Transaction(Utility.getDate(null), transType, amount, description))) {
+            if (account.addTransaction(new Account().new Transaction(Utility.getDate(null), transType, amount, description))) {
                 System.out.println(" Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }
@@ -449,7 +453,6 @@ final class Input {
     }
 
     /**
-     *
      * @return
      */
     protected static boolean checkInput() {
