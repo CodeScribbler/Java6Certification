@@ -53,6 +53,11 @@ public class Account {
     }
 
 
+    public int getTransListSize() {
+        return this.transactionsList.size();
+    }
+
+
     public List<Transaction> getSortedTransList(String option) {
         List<Transaction> result = new ArrayList<Transaction>(transactionsList);
         if (option.equalsIgnoreCase("ASC"))

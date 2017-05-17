@@ -133,7 +133,7 @@ final class Output {
     /**
      *
      */
-    private static void printMenu(String[] options) {
+    protected static void printMenu(String[] options) {
         for (String option : options)
             System.out.println(option);
     }
@@ -193,6 +193,11 @@ final class Output {
 
         accList.addAll(bank.getAllAccounts());
 
+        if (accList.isEmpty()) {
+            System.out.println(" Aktuell gibt es keine Transaktionen zum ausgeben!\n");
+            return;
+        }
+
         for (Account index : accList) {
             transList.addAll(index.getSortedTransList(option));
         }
@@ -211,9 +216,9 @@ final class Output {
 
 final class Input {
 
-    protected static final String[] transMenuSave = { "\n\n ----- Transaktionen speichern ----- \n\n" + "(1) Speichern unter C:\\\n"+ "(2) Speichern unter Desktop\n" + "(3) Speicherort selbst auswählen\n" + "(4) Abbrechen\n" };
+    protected static final String[] transMenuSave = { "\n\n ----- Transaktionen speichern ----- \n\n", "(1) Speichern unter C:\\", "(2) Speichern unter Desktop", "(3) Speicherort selbst auswählen", "(4) Abbrechen" };
 
-    protected static final String[] transMenuLoad = { "\n\n ----- Transaktionen einlesen ----- \n\n" + "(1) Einlesen unter C:\\\n" + "(2) Einlesen unter Desktop\n" + "(3) Verzeichnis selbst auswählen\n" + "(4) Abbrechen\n" };
+    protected static final String[] transMenuLoad = { "\n\n ----- Transaktionen einlesen ----- \n\n", "(1) Einlesen unter C:\\", "(2) Einlesen unter Desktop", "(3) Verzeichnis selbst auswählen", "(4) Abbrechen" };
 
     private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
 
@@ -453,11 +458,22 @@ final class Input {
     }
 
 
-    protected static String readCsvInfo(String[] options) {
+    protected static String readCsvInfo(Bank bank, String[] options) {
         String path;
         int chioce;
+        List<Account> accountList = new ArrayList<Account>();
 
-        System.out.println(Arrays.toString(options));
+        if (options[0].equals("----- Transaktionen speichern -----")) {
+            accountList.addAll(bank.getAllAccounts());
+            for (Account index : accountList) {
+                if (index.getTransListSize() > 0)
+                    System.out.println(" Da ist etwas!");
+
+
+            }
+        }
+
+        Output.printMenu(options);
 
         do {
             chioce = Utility.readInt("Auswahl: ");
