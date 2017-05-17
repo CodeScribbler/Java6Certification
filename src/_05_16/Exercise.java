@@ -10,14 +10,15 @@ public class Exercise extends Thread {
 
     @Override
     public void run() {
-        synchronized (sb) {
-            for (int i = 1; i <= 100; i++) {
-                System.err.print(sb);
-            }
-            System.err.println();
-
-            char character = sb.charAt(0);
-            sb.setCharAt(0, ++character);
+        synchronized (this) {
+            System.out.println(Thread.currentThread().getId());
+//            for (int i = 1; i <= 100; i++) {
+//                System.err.print(sb);
+//            }
+//            System.err.println();
+//
+//            char character = sb.charAt(0);
+//            sb.setCharAt(0, ++character);
         }
     }
 
