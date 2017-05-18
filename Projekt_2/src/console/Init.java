@@ -200,8 +200,8 @@ final class Output {
             transList.addAll(index.getSortedTransList(option));
         }
 
-        for (Object index : transList) {
-            System.out.println(index.toString());
+        for (Transaction index : transList) {
+            System.out.println(" " + index.toString());
         }
         System.out.println("\n");
     }
@@ -336,7 +336,7 @@ final class Input {
      * @param bank
      */
     protected static void createPrivateCustomer(Bank bank) {
-        Date birthdate = null;
+        String birthdate = null;
         System.out.println("\n - Private Kundenanlegung wird initialisiert - \n");
 
         String firstname;
@@ -368,11 +368,8 @@ final class Input {
         } while (email == null || !checkInput());
 
         do {
-            try {
-                birthdate = Utility.readDate("\n Eingabe Geburtsdatum, Formatvorgabe dd.mm.yyyy: ");
-            } catch (ParseException var8) {
-                System.err.println(var8.getMessage());
-            }
+            birthdate = Utility.readString("\n Eingabe Geburtsdatum, Formatvorgabe dd.mm.yyyy: ");
+            Utility.checkDateFormat(birthdate, false);
         } while (birthdate == null || !checkInput());
 
         if (bank.addCustomer(new PrivateCustomer(address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate))) {
@@ -401,9 +398,9 @@ final class Input {
         String choice = Utility.readString("\n Zugehöriges Konto, Eingabe Kundennr: ");
 
         if (bank.setAccount(choice, acc)) {
-            System.out.println("\n\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n\n");
+            System.out.println("\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n" + " Zugeteilte IBAN: " + acc.getAccountNumber() +" \n\n");
         } else {
-            System.out.println("\n\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
+            System.out.println("\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
         }
     }
 
@@ -422,7 +419,7 @@ final class Input {
                     throw new WrongInputException(" Fehlerhafte IBAN, die Eingabe wird neu gestartet!");
                 }
             } catch (WrongInputException var9) {
-                JOptionPane.showMessageDialog(new Frame(), var9.getMessage(), "Benutzereingabe Eingabe", 0);
+                JOptionPane.showMessageDialog(new Frame(), var9.getMessage(), "Benutzereingabe Eingabe", JOptionPane.ERROR_MESSAGE);
             }
         } while (iban == null);
 
@@ -444,7 +441,7 @@ final class Input {
                 description = Utility.readString(" Eingabe Bescheibung: ");
             } while (!checkInput());
 
-            if (account.addTransaction(new Account().new Transaction(Utility.getDate(null), transType, amount, description))) {
+            if (account.addTransaction(account.new Transaction(Utility.getDate(null), transType, amount, description))) {
                 System.out.println("\n Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }

@@ -1,5 +1,10 @@
 package model;
 
+import com.sun.javaws.exceptions.ExitException;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -79,24 +84,14 @@ public class Account {
     private static final Comparator<Transaction> byTimestampAsc = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction t1, Transaction t2) {
-            if (t1.getTimestamp().before(t2.getTimestamp()))
-                return -1;
-            if (t1.getTimestamp().after(t2.getTimestamp()))
-                return 1;
-            else
-                return 0;
+            return t1.getTimestamp().compareTo(t2.getTimestamp());
         }
     };
 
     private static final Comparator<Transaction> byTimestampDsc = new Comparator<Transaction>() {
         @Override
         public int compare(Transaction t1, Transaction t2) {
-            if (t1.getTimestamp().after(t2.getTimestamp()))
-                return -1;
-            if (t1.getTimestamp().before(t2.getTimestamp()))
-                return 1;
-            else
-                return 0;
+            return Integer.reverse(t1.getTimestamp().compareTo(t2.getTimestamp()));
         }
     };
 
@@ -127,7 +122,7 @@ public class Account {
      */
     public class Transaction {
 
-        private Date timestamp;
+        private String timestamp;
 
         private TransactionType transType;
 
@@ -136,7 +131,7 @@ public class Account {
         private double amount;
 
 
-        public Date getTimestamp() {
+        public String getTimestamp() {
             return timestamp;
         }
 
@@ -157,7 +152,7 @@ public class Account {
             return Account.this.accountNumber + ";"+  this.timestamp + ";" + ((this.transType == TransactionType.DESPOSIT) ? "Einzahlung;" : "Auszahlung;" ) + this.description + ";" + this.amount;
         }
 
-        public Transaction(Date timestamp, TransactionType transType, double amount, String description) {
+        public Transaction(String timestamp, TransactionType transType, double amount, String description) {
             this.timestamp = timestamp;
             this.transType = transType;
             this.amount = amount;

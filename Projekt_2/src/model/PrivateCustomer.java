@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Date;
-
 public class PrivateCustomer extends Customer {
 
     /**
@@ -17,7 +15,7 @@ public class PrivateCustomer extends Customer {
     /**
      *
      */
-    private Date birthdate;
+    private String birthdate;
 
 
     /**
@@ -37,7 +35,7 @@ public class PrivateCustomer extends Customer {
     /**
      *
      */
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
@@ -47,7 +45,7 @@ public class PrivateCustomer extends Customer {
     /**
      *
      */
-    public PrivateCustomer(String address, String phoneNumber, CustomerTyp profile, String email, String firstName, String lastname, Date birthdate) {
+    public PrivateCustomer(String address, String phoneNumber, CustomerTyp profile, String email, String firstName, String lastname, String birthdate) {
         super(address, phoneNumber, profile, email);
         this.firstName = firstName;
         this.lastname = lastname;

@@ -72,25 +72,6 @@ public class Utility {
     /**
      *
      */
-    public static long readLong(String prompt) {
-        System.out.print(prompt);
-        try {
-
-            return new java.util.Scanner(System.in).nextLong();
-
-        } catch (InputMismatchException e) {
-            System.err.println(e.getMessage());
-        } catch (NoSuchElementException e) {
-            System.err.println(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
-        return -1;
-    }
-
-    /**
-     *
-     */
     public static double readDouble(String prompt) {
         System.out.print(prompt);
         try {
@@ -110,39 +91,48 @@ public class Utility {
 
     /**
      *
+     * @return
      */
-    public static Date readDate(String prompt) throws ParseException {
-        System.out.print(prompt);
-        DateFormat formatter = new SimpleDateFormat("dd.mm.yyyy");
+    public static String getDate(String dateString) {
+        String formatted;
 
-        return formatter.parse(new java.util.Scanner(System.in).next());
+        DateFormat dfsdf  = new SimpleDateFormat("yyyy-MM-d'T' H:m:s Z");
+
+        if (dateString != null) {
+            formatted = dfsdf.format(dateString);
+            return dfsdf.format(formatted);
+        }
+        else
+            return dfsdf.format(new Date());
+
     }
 
     /**
      *
+     * @param dateString
+     * @param flag
      * @return
      */
-    public static Date getDate(String str) {
-        Date date = null;
-        String formatted;
-
-        Calendar cal = Calendar.getInstance ();
-        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
-
-        if (str != null)
-            formatted = sdf .format(str);
+    public static boolean checkDateFormat(String dateString, boolean flag) {
+        SimpleDateFormat dateFormat;
+        if (flag)
+            dateFormat = new SimpleDateFormat("yyyy-MM-d'T' H:m:s Z");
         else
-            formatted = sdf .format(cal.getTime());
+            dateFormat = new SimpleDateFormat("d.MM.yyyy");
+
         try {
-            date = sdf.parse(formatted);
+            Date date = dateFormat.parse(dateString);
+            dateFormat.format(date);
+            return true;
         } catch (ParseException e) {
-            System.err.println(e.getMessage());
+            System.err.println(" Das Eingelesende Datum (" + dateString + ") ist falsch Formatiert!");
         }
-        return date;
+        return false;
     }
 
-    private Utility() {}
 
+
+    private Utility() {}
 
 
 }

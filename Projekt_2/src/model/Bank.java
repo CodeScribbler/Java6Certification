@@ -77,11 +77,11 @@ public class Bank {
     private List<Customer> customerList = new ArrayList<Customer>();
 
     {
-        customerList.add(new PrivateCustomer("MusterStraße 1", "0221-15555", CustomerTyp.PRIVATECUSTOMER, "example1@whatever.com", "Max", "Mustermann", Utility.getDate(null)));
-        customerList.add(new PrivateCustomer("MusterStraße 2", "0221-25555", CustomerTyp.PRIVATECUSTOMER, "example2@whatever.com", "Diana", "Musterfrau", Utility.getDate(null)));
-        customerList.add(new PrivateCustomer("MusterStraße 3", "0221-35555", CustomerTyp.PRIVATECUSTOMER, "example3@whatever.com", "Reiner", "Mustermann", Utility.getDate(null)));
-        customerList.add(new PrivateCustomer("MusterStraße 4", "0221-45555", CustomerTyp.PRIVATECUSTOMER, "example4@whatever.com", "Sabrina", "Musterfrau", Utility.getDate(null)));
-        customerList.add(new PrivateCustomer("MusterStraße 5", "0221-55555", CustomerTyp.PRIVATECUSTOMER, "example5@whatever.com", "Dirk", "Mustermann", Utility.getDate(null)));
+        customerList.add(new PrivateCustomer("MusterStraße 1", "0221-15555", CustomerTyp.PRIVATECUSTOMER, "example1@whatever.com", "Max", "Mustermann", "04.06.1985"));
+        customerList.add(new PrivateCustomer("MusterStraße 2", "0221-25555", CustomerTyp.PRIVATECUSTOMER, "example2@whatever.com", "Diana", "Musterfrau", "08.01.1977"));
+        customerList.add(new PrivateCustomer("MusterStraße 3", "0221-35555", CustomerTyp.PRIVATECUSTOMER, "example3@whatever.com", "Reiner", "Mustermann", "01.05.1989"));
+        customerList.add(new PrivateCustomer("MusterStraße 4", "0221-45555", CustomerTyp.PRIVATECUSTOMER, "example4@whatever.com", "Sabrina", "Musterfrau", "24.12.1991"));
+        customerList.add(new PrivateCustomer("MusterStraße 5", "0221-55555", CustomerTyp.PRIVATECUSTOMER, "example5@whatever.com", "Dirk", "Mustermann", "11.11.1965"));
 
         customerList.add(new BusinessCustomer("MusterStraße 6", "0221-65555", CustomerTyp.BUSINESSCUSTOMER, "example6@whatever.com", "Consulting aAa", new Counterpart("Dave", "Nobody", "0221-115555")));
         customerList.add(new BusinessCustomer("MusterStraße 7", "0221-75555", CustomerTyp.BUSINESSCUSTOMER, "example7@whatever.com", "Consulting bBb", new Counterpart("Chris", "Nobody", "0221-125555")));
@@ -263,13 +263,15 @@ public class Bank {
                         for (Account index : accountList) {
                             if (String.valueOf(index.getAccountNumber()).equals(tokens[IBAN])) {
 
-                                Account acc = new Account();
-                                Transaction transaction = acc.new Transaction(Utility.getDate(tokens[TIMESTAMP]),
-                                        ((tokens[TRANSACTIONTYPE]).equalsIgnoreCase("Einzahlen") ? TransactionType.DESPOSIT : TransactionType.DISBURSEMENT),
-                                        Double.parseDouble(tokens[AMOUNT]),
-                                        tokens[DESCRIPTION]);
+                                if (Utility.checkDateFormat(tokens[TIMESTAMP], true)) {
+                                    Account acc = new Account();
+                                    Transaction transaction = acc.new Transaction(Utility.getDate(tokens[TIMESTAMP]),
+                                            ((tokens[TRANSACTIONTYPE]).equalsIgnoreCase("Einzahlen") ? TransactionType.DESPOSIT : TransactionType.DISBURSEMENT),
+                                            Double.parseDouble(tokens[AMOUNT]),
+                                            tokens[DESCRIPTION]);
 
-                                index.addTransaction(transaction);
+                                    index.addTransaction(transaction);
+                                }
                             }
                         }
                     }
