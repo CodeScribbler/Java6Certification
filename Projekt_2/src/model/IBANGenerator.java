@@ -4,13 +4,15 @@ import java.util.Random;
 
 public class IBANGenerator {
 
-    public String getNumber() {
+    public String getNumber(int bankCode) {
         char[] digits = "0123456789".toCharArray();
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
 
-        for (int i = 0; i < 5; i++) {
-            if (i == 3) sb.append("-");
+        sb.append("DE21");
+        sb.append(bankCode);
+
+        for (int i = 0; i < 10; i++) {
             sb.append(digits[random.nextInt(digits.length)]);
         }
 
@@ -18,10 +20,10 @@ public class IBANGenerator {
     }
 
 
-    private static IBANGenerator ourInstance = new IBANGenerator();
+    private static IBANGenerator ibanInstance = new IBANGenerator();
 
     public static IBANGenerator getInstance() {
-        return ourInstance;
+        return ibanInstance;
     }
 
     private IBANGenerator() {}

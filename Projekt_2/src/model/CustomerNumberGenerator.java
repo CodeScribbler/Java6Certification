@@ -27,6 +27,5 @@ public class CustomerNumberGenerator {
         return ourInstance;
     }
 
-    private CustomerNumberGenerator() {
-    }
+    private CustomerNumberGenerator() {}
 }

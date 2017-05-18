@@ -8,13 +8,7 @@ public class Account {
     /**
      *
      */
-    public static long IBAN = 1000;
-
-
-    /**
-     *
-     */
-    private long accountNumber;
+    private String accountNumber;
 
     /**
      *
@@ -25,7 +19,7 @@ public class Account {
     /**
      *
      */
-    public long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
@@ -119,13 +113,12 @@ public class Account {
     /**
      *
      */
-    public Account(long accountNumber, double accountBalance) {
+    public Account(String accountNumber, double accountBalance) {
         this.accountNumber = accountNumber;
         this.accountBalance = accountBalance;
     }
 
     public Account() {}
-
 
 
 
@@ -161,7 +154,7 @@ public class Account {
 
         @Override
         public String toString() {
-            return Account.this.accountNumber + ";"+  this.timestamp + ";" + ((this.transType == TransactionType.DESPOSIT) ? "Einzahlung;" : "Auszahlung;" ) + this.description + ";" + this.amount + " €";
+            return Account.this.accountNumber + ";"+  this.timestamp + ";" + ((this.transType == TransactionType.DESPOSIT) ? "Einzahlung;" : "Auszahlung;" ) + this.description + ";" + this.amount;
         }
 
         public Transaction(Date timestamp, TransactionType transType, double amount, String description) {

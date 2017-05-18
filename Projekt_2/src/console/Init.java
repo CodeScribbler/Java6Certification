@@ -59,7 +59,7 @@ final class Output {
                     break;
                 }
                 case 6: {
-                    long iban = Utility.readLong("Eingabe IBAN: ");
+                    String iban = Utility.readString("Eingabe IBAN: ");
                     if (bank.searchAccount(iban) != null)
                         System.out.println(bank.searchAccount(iban).toString());
                     else
@@ -394,7 +394,7 @@ final class Input {
             accountBalance = Utility.readDouble(" Geben Sie bitte den Kontostand ein: ");
         } while (!checkInput());
 
-        Account acc = new Account(Account.IBAN++, accountBalance);
+        Account acc = new Account(IBANGenerator.getInstance().getNumber(bank.getBankCode()), accountBalance);
         Output.printPrivateCustomer(bank.getSortedCustomerList(false));
         Output.printBuisnessCustomer(bank.getSortedCustomerList(false));
 
@@ -414,22 +414,24 @@ final class Input {
      */
     protected static void createTransaction(Bank bank, String title, TransactionType transType) {
         System.out.println("\n ----- " + title + " ----- \n");
-        long iban = 0L;
+        String iban = null;
 
         do {
             try {
-                if ((iban = Utility.readLong(" Eingabe IBAN: ")) == -1L) {
+                if ((iban = Utility.readString(" Eingabe IBAN: ")) == null) {
                     throw new WrongInputException(" Fehlerhafte IBAN, die Eingabe wird neu gestartet!");
                 }
             } catch (WrongInputException var9) {
                 JOptionPane.showMessageDialog(new Frame(), var9.getMessage(), "Benutzereingabe Eingabe", 0);
             }
-        } while (iban == -1L);
+        } while (iban == null);
 
         Account account = bank.searchAccount(iban);
 
         if (account != null) {
+            String description;
             double amount;
+
             do {
                 amount = Utility.readDouble(" Eingabe Betrag: ");
                 if (transType == TransactionType.DISBURSEMENT && account.getAccountBalance() - amount < 0.0D) {
@@ -438,18 +440,17 @@ final class Input {
                 }
             } while (amount == 0.0D && !checkInput());
 
-            String description;
             do {
                 description = Utility.readString(" Eingabe Bescheibung: ");
             } while (!checkInput());
 
             if (account.addTransaction(new Account().new Transaction(Utility.getDate(null), transType, amount, description))) {
-                System.out.println(" Die Transanktion wurde erfogrich ausgeführt!\n\n");
+                System.out.println("\n Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }
 
         }
-        System.out.println(" Das Konto: " + iban + " existiert nicht!\n\n");
+        System.out.println("\n Das Konto: " + iban + " existiert nicht!\n\n");
     }
 
     /**

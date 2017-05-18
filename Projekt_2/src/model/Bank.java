@@ -2,7 +2,6 @@ package model;
 
 import java.io.*;
 import java.util.*;
-
 import model.Account.Transaction;
 
 
@@ -173,11 +172,11 @@ public class Bank {
     /**
      *
      */
-    public Account searchAccount(long iban) {
+    public Account searchAccount(String iban) {
         for (Customer index : customerList) {
             List<Account> accList = index.getAccounts();
             for (Account pointer : accList) {
-                if (pointer.getAccountNumber() == iban) {
+                if (pointer.getAccountNumber().equals(iban)) {
                     return pointer;
                 }
             }
@@ -191,7 +190,7 @@ public class Bank {
         BufferedWriter fWriter = null;
 
         List<Account> accountList = new ArrayList<Account>(getAllAccounts());
-        List<Long> ibanList = new ArrayList<Long>();
+        List<String> ibanList = new ArrayList<String>();
         List<Transaction> transList = new ArrayList<Transaction>();
 
         for (Account index : accountList) {
@@ -208,7 +207,7 @@ public class Bank {
             fWriter.append(fileHeader);
             fWriter.append("\n");
 
-            for (Long iban : ibanList) {
+            for (String iban : ibanList) {
                 fWriter.append(String.valueOf(iban));
                 for (Transaction index : transList) {
                     fWriter.append(String.valueOf(index.getTimestamp()));
@@ -298,8 +297,6 @@ public class Bank {
 
 
 
-
-
     // Singleton constructor
 
     /**
@@ -318,7 +315,7 @@ public class Bank {
     /**
      * Statische erzeugung der Bank Instanz.
      */
-    private static Bank ourInstance = new Bank();
+    private static Bank bankInstance = new Bank();
 
     /**
      * Die statische Methode gibt die Referrenz
@@ -327,7 +324,7 @@ public class Bank {
      * @return Die Referrenz auf die Bank Instanz.
      */
     public static Bank getInstance() {
-        return ourInstance;
+        return bankInstance;
     }
 
 
