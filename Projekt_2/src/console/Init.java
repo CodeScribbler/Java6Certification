@@ -2,6 +2,7 @@ package console;
 
 import model.*;
 import model.Account.Transaction;
+import view.GuiForm;
 
 import java.io.File;
 import java.util.*;
@@ -111,8 +112,28 @@ final class Output {
                     break;
 
                 }
+                case 15: {
+                    List<Customer> customerList = new ArrayList<Customer>(bank.getSortedCustomerList(false));
+                    if (customerList.size() > 0) {
+                        String name = null;
+
+                        for (Customer index : customerList) {
+                            if (index instanceof PrivateCustomer)
+                                name = ((PrivateCustomer) index).getFirstName() + " " + ((PrivateCustomer) index).getLastname();
+                            if (index instanceof BusinessCustomer)
+                                name = ((BusinessCustomer) index).getCompanyName();
+
+                            GuiForm frame = new GuiForm(name);
+                        }
+                    }
+                    else
+                        System.out.println(" Aktuell existieren keine Kunden zur bearbeitung!\n");
+
+                    break;
+
+                }
             }
-        } while (choice != 15);
+        } while (choice != 16);
 
     }
 
@@ -125,7 +146,7 @@ final class Output {
             " (04) Kunde mit Konten anzeigen (Auswahl durch Kundennummer)", " (05) Kunde mit Konten anzeigen (Auswahl durch Name)",
             " (06) Konto anzeigen (Auswahl durch IBAN) ", " (07) Alle Kunden unsortiert anzeigen", " (08) Alle Kunden sortiert nach aufsteigender Kundenummer anzeigen",
             " (09) Alle Konten unsortiert anzeigen", " (10) Geld auf Konto einzahlen", " (11) Geld vom Konto abheben", " (12) Transaktionsliste absteigend sortiert nach Zeitstempel anzeige",
-            " (13) Transaktionsliste aufsteigend sortiert nach Zeitstempel speichern", " (14) Transaktionsliste einlesen", " (15) Beenden"
+            " (13) Transaktionsliste aufsteigend sortiert nach Zeitstempel speichern", " (14) Transaktionsliste einlesen", " (15) GUI für Ein- und Auszahlungen öffnen", " (16) Beenden\n"
     };
 
 
