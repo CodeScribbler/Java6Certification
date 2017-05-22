@@ -117,16 +117,13 @@ final class Output {
                     if (customerList.size() > 0) {
                         String name = null;
 
-                        for (Customer index : customerList) {
-                            if (index instanceof PrivateCustomer)
-                                name = ((PrivateCustomer) index).getFirstName() + " " + ((PrivateCustomer) index).getLastname();
-                            if (index instanceof BusinessCustomer)
-                                name = ((BusinessCustomer) index).getCompanyName();
+                        if (customerList.get(0) instanceof PrivateCustomer)
+                            name = ((PrivateCustomer) customerList.get(0)).getFirstName() + " " + ((PrivateCustomer) customerList.get(0)).getLastname();
+                        if (customerList.get(0) instanceof BusinessCustomer)
+                            name = ((BusinessCustomer) customerList.get(0)).getCompanyName();
 
-                            GuiForm frame = new GuiForm(name);
-                        }
-                    }
-                    else
+                        GuiForm frame = new GuiForm(name);
+                    } else
                         System.out.println(" Aktuell existieren keine Kunden zur bearbeitung!\n");
 
                     break;
@@ -208,7 +205,7 @@ final class Output {
      */
     private static void printTransaction(Bank bank, String option) {
         List<Account> accList = new ArrayList<Account>();
-        List <Transaction> transList = new ArrayList<Transaction>();
+        List<Transaction> transList = new ArrayList<Transaction>();
 
         accList.addAll(bank.getAllAccounts());
 
@@ -235,7 +232,8 @@ final class Output {
             else
                 System.out.print("\t");
             if (i == eof)
-                System.out.print("\n");}
+                System.out.print("\n");
+        }
     }
 
 
@@ -419,7 +417,7 @@ final class Input {
         String choice = Utility.readString("\n Zugehöriges Konto, Eingabe Kundennr: ");
 
         if (bank.setAccount(choice, acc)) {
-            System.out.println("\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n" + " Zugeteilte IBAN: " + acc.getAccountNumber() +" \n\n");
+            System.out.println("\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n" + " Zugeteilte IBAN: " + acc.getAccountNumber() + " \n\n");
         } else {
             System.out.println("\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
         }

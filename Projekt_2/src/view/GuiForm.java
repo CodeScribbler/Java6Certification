@@ -15,7 +15,7 @@ public class GuiForm extends JFrame {
 
     public GuiForm(String name) {
         super("Kunde: " + name);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setIconImage(new ImageIcon("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\berliner_bank_icon.JPG\\").getImage());
         setSize(950, 600);
 
@@ -158,30 +158,30 @@ public class GuiForm extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        try {
-            //  com.sun.java.swing.plaf.motif.MotifLookAndFeel
-            //  com.sun.java.swing.plaf.windows.WindowsLookAndFeel
-            //  com.sun.java.swing.plaf.gtk.GTKLookAndFeel
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new GuiForm("Mr. X");
-            }
-        });
-
-    }
+//    public static void main(String[] args) {
+//        try {
+//            //  com.sun.java.swing.plaf.motif.MotifLookAndFeel
+//            //  com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+//            //  com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+//        } catch (UnsupportedLookAndFeelException ex) {
+//            ex.printStackTrace();
+//        } catch (IllegalAccessException ex) {
+//            ex.printStackTrace();
+//        } catch (InstantiationException ex) {
+//            ex.printStackTrace();
+//        } catch (ClassNotFoundException ex) {
+//            ex.printStackTrace();
+//        }
+//
+//        //Schedule a job for the event dispatch thread:
+//        //creating and showing this application's GUI.
+//        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                new GuiForm("Mr. X");
+//            }
+//        });
+//
+//    }
 
 }
