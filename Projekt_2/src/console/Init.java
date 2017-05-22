@@ -113,16 +113,22 @@ final class Output {
 
                 }
                 case 15: {
-                    List<Customer> customerList = new ArrayList<Customer>(bank.getSortedCustomerList(false));
+                    List<Customer> customerList = new ArrayList<Customer>(bank.getSortedCustomerList(true));
                     if (customerList.size() > 0) {
                         String name = null;
-
-                        if (customerList.get(0) instanceof PrivateCustomer)
+                        List<Account> accountList = new ArrayList<Account>();
+                        if (customerList.get(0) instanceof PrivateCustomer) {
+                            accountList.addAll(customerList.get(0).getAccounts());
                             name = ((PrivateCustomer) customerList.get(0)).getFirstName() + " " + ((PrivateCustomer) customerList.get(0)).getLastname();
-                        if (customerList.get(0) instanceof BusinessCustomer)
-                            name = ((BusinessCustomer) customerList.get(0)).getCompanyName();
+                        }
 
-                        GuiForm frame = new GuiForm(name);
+                        if (customerList.get(0) instanceof BusinessCustomer) {
+                            accountList.addAll(customerList.get(0).getAccounts());
+                            name = ((BusinessCustomer) customerList.get(0)).getCompanyName();
+                        }
+
+
+                        GuiForm frame = new GuiForm(name, accountList);
                     } else
                         System.out.println(" Aktuell existieren keine Kunden zur bearbeitung!\n");
 
@@ -410,7 +416,7 @@ final class Input {
             accountBalance = Utility.readDouble(" Geben Sie bitte den Kontostand ein: ");
         } while (!checkInput());
 
-        Account acc = new Account(IBANGenerator.getInstance().getNumber(bank.getBankCode()), accountBalance);
+        Account acc = new Account(IBANGenerator.getInstance().getNumber(), accountBalance);
         Output.printPrivateCustomer(bank.getSortedCustomerList(false));
         Output.printBuisnessCustomer(bank.getSortedCustomerList(false));
 

@@ -1,10 +1,14 @@
 package view;
 
+import model.Account;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.Font;
+
 
 
 public class GuiForm extends JFrame {
@@ -13,11 +17,18 @@ public class GuiForm extends JFrame {
      * Create the frame.
      */
 
-    public GuiForm(String name) {
+    protected List<Account> accountList = new ArrayList<Account>();
+
+    public GuiForm(String name, List<Account> accountList) {
         super("Kunde: " + name);
+        this.accountList.addAll(accountList);
+        getContentPane().setLayout(new BorderLayout());
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setIconImage(new ImageIcon("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\berliner_bank_icon.JPG\\").getImage());
-        setSize(950, 600);
+        setResizable(false);
+        setSize(980, 520);
 
         JMenuBar jmb = new JMenuBar();
         JMenu customerMenu = new JMenu("Kunden");
@@ -42,36 +53,51 @@ public class GuiForm extends JFrame {
         jmb.add(infoMenu);
         setJMenuBar(jmb);
 
-        Container frameContentPane = this.getContentPane();
-        frameContentPane.add(new BankPanel());
+        mainPanel.add(new topPanel());
+        mainPanel.add(new bottomPanel());
+
+        getContentPane().add(mainPanel);
 
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
 
-    class BankPanel extends JPanel {
+    class topPanel extends JPanel {
 
-        public BankPanel() {
-
-            this.setBorder(new EmptyBorder(5, 5, 5, 5));
-            this.setLayout(new BorderLayout(0, 0));
-
-
-            //  Create top splitpanel
-
+        public topPanel() {
+            setLayout(new BorderLayout());
+            List<Account.Transaction> transactionList = new ArrayList<Account.Transaction>();
             JTextArea inputTextArea = new JTextArea();
+            for (Account index : accountList)
+               transactionList.addAll(index.getSortedTransList("ASC"));
+            for (Account.Transaction index : transactionList) {
+                inputTextArea.append(index.toString());
+                inputTextArea.append("\n");
+            }
+            inputTextArea.append("\n Gesamt: " + accountList.get(0).getAccountBalance() + " Euro");
+
+            // create a dataset...
+//            DefaultPieDataset data = new DefaultPieDataset();
+//            data.setValue("Category 1", 43.2);
+//            data.setValue("Category 2", 27.9);
+//            data.setValue("Category 3", 79.5);
+//// create a chart...
+//            JFreeChart chart = ChartFactory.createPieChart("Sample Pie Chart", data, true, true, false);
+//
+//// create and display a frame...
+//            ChartFrame pieChart = new ChartFrame("First", chart);
+//            frame.pack();
+//            frame.setVisible(true);
+
+
 
             JScrollPane scrollPanelLeft = new JScrollPane(inputTextArea);
             JPanel panelDiagramm = new JPanel();
-
             JLabel headline = new JLabel("Verteilung");
+
             headline.setFont(new Font("Arial Bold", Font.BOLD, 20));
             panelDiagramm.add(headline);
-
-            Dimension minimumSize = new Dimension(50, 50);
-            scrollPanelLeft.setMinimumSize(minimumSize);
-            panelDiagramm.setMinimumSize(minimumSize);
 
             JSplitPane splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, scrollPanelLeft, panelDiagramm);
             splitPaneTop.setOneTouchExpandable(true);
@@ -80,9 +106,14 @@ public class GuiForm extends JFrame {
             splitPaneTop.setResizeWeight(0.5);
             //splitPaneTop.setDividerLocation(getWidth()/2);
             this.add(splitPaneTop, BorderLayout.CENTER);
+        }
+    }
 
 
-            //  Create bottom splitpanel
+    class bottomPanel extends JPanel {
+
+        public bottomPanel() {
+            this.setLayout(new BorderLayout());
 
             JLabel lblIban1 = new JLabel("IBAN: DE02100100100823464265");
             JLabel lblIban2 = new JLabel("IBAN: DE02200100100823464265");
@@ -109,79 +140,78 @@ public class GuiForm extends JFrame {
             JTextField txtFieldDisbursement = new JTextField(15);
             JLabel lblEuro3 = new JLabel("Euro");
 
-            JPanel panelLeft = new JPanel(new GridLayout(4, 3));
-            panelLeft.add(lblIban1, 0);
-            panelLeft.add(lblBalance1, 1);
-            panelLeft.add(txtFieldBalance1, 1);
-            panelLeft.add(lblEuro11, 1);
-//            panelLeft.add(lblDeposit,2);
-//            panelLeft.add(txtFieldDeposit,2);
-//            panelLeft.add(lblEuro2,2);
-//            panelLeft.add(lblDisbursment,3);
-//            panelLeft.add(txtFieldDisbursement,3);
-//            panelLeft.add(lblEuro3,3);
+            JPanel panelLeft = new JPanel();
+            panelLeft.add(lblIban1);
+            panelLeft.add(lblBalance1);
+            panelLeft.add(txtFieldBalance1);
+            panelLeft.add(lblEuro11);
+            panelLeft.add(lblDeposit);
+            panelLeft.add(txtFieldDeposit);
+            panelLeft.add(lblEuro2);
+            panelLeft.add(lblDisbursment);
+            panelLeft.add(txtFieldDisbursement);
+            panelLeft.add(lblEuro3);
 
-            JPanel panelCenter = new JPanel(new GridLayout(4,3));
-            //panelCenter.setMinimumSize(new Dimension(200, 200));
-            //panelCenter.setSize(300, 200);
-            panelCenter.add(lblIban2, 0);
-            panelCenter.add(lblBalance2,1);
-            panelCenter.add(txtFieldBalance2,1);
+            JPanel panelCenter = new JPanel();
+
+            panelCenter.add(lblIban2);
+            panelCenter.add(lblBalance2);
+            panelCenter.add(txtFieldBalance2);
             panelLeft.add(lblEuro21, 1);
 
-            JPanel panelRight = new JPanel(new GridLayout(4, 3));
-            //panelRight.setMinimumSize(new Dimension(200, 200));
-            //panelRight.setSize(300, 200);
-            panelRight.add(lblIban3, 0);
+            JPanel panelRight = new JPanel();
+
+            panelRight.add(lblIban3);
             panelRight.add(lblBalance3,1);
             panelRight.add(txtFieldBalance3,1);
             panelLeft.add(lblEuro31, 1);
 
 
-            JPanel bottomPanel = new JPanel();
-            bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-            bottomPanel.add(panelLeft);
-            bottomPanel.add(panelCenter);
-            bottomPanel.add(panelRight);
+            JPanel containerPanel = new JPanel();
+            containerPanel.setLayout(new GridLayout(0, 3));
+            containerPanel.add(panelLeft);
+            containerPanel.add(panelCenter);
+            containerPanel.add(panelRight);
 
 
+            JPanel dummy = new JPanel();
 
-            JSplitPane splitPaneBottom = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true);
-            splitPaneBottom.add(bottomPanel);
+            JSplitPane splitPaneBottom = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, new JPanel(), containerPanel);
             splitPaneBottom.setOneTouchExpandable(true);
-            splitPaneBottom.setDividerSize(10);
-            //splitPaneBottom.setDividerLocation(475);
+            splitPaneBottom.setDividerSize(8);
+            splitPaneBottom.setDividerLocation(0);
+            splitPaneBottom.setResizeWeight(0);
 
-
-            this.add(splitPaneBottom, BorderLayout.PAGE_END);
+            this.add(splitPaneBottom, BorderLayout.CENTER);
 
         }
     }
 
-//    public static void main(String[] args) {
-//        try {
-//            //  com.sun.java.swing.plaf.motif.MotifLookAndFeel
-//            //  com.sun.java.swing.plaf.windows.WindowsLookAndFeel
-//            //  com.sun.java.swing.plaf.gtk.GTKLookAndFeel
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//        } catch (UnsupportedLookAndFeelException ex) {
-//            ex.printStackTrace();
-//        } catch (IllegalAccessException ex) {
-//            ex.printStackTrace();
-//        } catch (InstantiationException ex) {
-//            ex.printStackTrace();
-//        } catch (ClassNotFoundException ex) {
-//            ex.printStackTrace();
-//        }
-//
-//        //Schedule a job for the event dispatch thread:
-//        //creating and showing this application's GUI.
+
+    public static void main(String[] args) {
+        try {
+            //  com.sun.java.swing.plaf.motif.MotifLookAndFeel
+            //  com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+            //  com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+            ex.printStackTrace();
+        } catch (IllegalAccessException ex) {
+            ex.printStackTrace();
+        } catch (InstantiationException ex) {
+            ex.printStackTrace();
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+
+        //Schedule a job for the event dispatch thread:
+        //creating and showing this application's GUI.
 //        javax.swing.SwingUtilities.invokeLater(new Runnable() {
 //            public void run() {
-//                new GuiForm("Mr. X");
+//                new GuiForm("Mr. X", );
 //            }
 //        });
-//
-//    }
+
+    }
 
 }

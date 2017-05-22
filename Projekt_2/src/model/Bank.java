@@ -88,6 +88,20 @@ public class Bank {
         customerList.add(new BusinessCustomer("MusterStraße 8", "0221-85555", CustomerTyp.BUSINESSCUSTOMER, "example8@whatever.com", "Consulting cCc", new Counterpart("Darrel", "Nobody", "0221-135555")));
         customerList.add(new BusinessCustomer("MusterStraße 9", "0221-95555", CustomerTyp.BUSINESSCUSTOMER, "example9@whatever.com", "Consulting dDd", new Counterpart("Jack", "Nobody", "0221-145555")));
         customerList.add(new BusinessCustomer("MusterStraße 10", "0221-105555", CustomerTyp.BUSINESSCUSTOMER, "example10@whatever.com", "Consulting eEe", new Counterpart("Michael", "Nobody", "0221-155555")));
+
+        List<Account> accountList = new ArrayList<Account>();
+        for (Customer index : customerList) {
+            index.addAccount(new Account(IBANGenerator.getInstance().getNumber(), 10000));
+            accountList.addAll(index.getAccounts());
+        }
+        for (Account index :accountList) {
+            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DESPOSIT, 5000, "Urlaubsgeld Juni"));
+            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 700, "Party July"));
+            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DESPOSIT, 3800, "Gehaltseingang Oktober"));
+            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 800, "Miete Oktober"));
+            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 200, "Amazon"));
+        }
+
     }
 
     /**
