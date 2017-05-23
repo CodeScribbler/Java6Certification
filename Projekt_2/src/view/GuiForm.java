@@ -1,14 +1,18 @@
 package view;
 
 import model.Account;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Font;
-
 
 
 public class GuiForm extends JFrame {
@@ -22,13 +26,12 @@ public class GuiForm extends JFrame {
     public GuiForm(String name, List<Account> accountList) {
         super("Kunde: " + name);
         this.accountList.addAll(accountList);
+
         getContentPane().setLayout(new BorderLayout());
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setIconImage(new ImageIcon("C:\\Users\\" + System.getProperty("user.name") + "\\Desktop\\berliner_bank_icon.JPG\\").getImage());
-        setResizable(false);
-        setSize(980, 520);
+        //setResizable(false);
+        setBounds(10, 10, 1100, 620);
 
         JMenuBar jmb = new JMenuBar();
         JMenu customerMenu = new JMenu("Kunden");
@@ -53,67 +56,53 @@ public class GuiForm extends JFrame {
         jmb.add(infoMenu);
         setJMenuBar(jmb);
 
-        mainPanel.add(new topPanel());
-        mainPanel.add(new bottomPanel());
-
-        getContentPane().add(mainPanel);
+        getContentPane().add(new bankPanel(), BorderLayout.CENTER);
 
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    class bankPanel extends JPanel {
 
-    class topPanel extends JPanel {
-
-        public topPanel() {
-            setLayout(new BorderLayout());
-            List<Account.Transaction> transactionList = new ArrayList<Account.Transaction>();
+        public bankPanel() {
             JTextArea inputTextArea = new JTextArea();
+            List<Account.Transaction> transactionList = new ArrayList<Account.Transaction>();
+
+            this.setLayout(new BorderLayout());
+
+            Border border = new BevelBorder(BevelBorder.RAISED, Color.gray, Color.gray);
+            this.setBorder(border);
+
             for (Account index : accountList)
-               transactionList.addAll(index.getSortedTransList("ASC"));
+                transactionList.addAll(index.getSortedTransList("ASC"));
+
             for (Account.Transaction index : transactionList) {
                 inputTextArea.append(index.toString());
                 inputTextArea.append("\n");
             }
             inputTextArea.append("\n Gesamt: " + accountList.get(0).getAccountBalance() + " Euro");
 
-            // create a dataset...
-//            DefaultPieDataset data = new DefaultPieDataset();
-//            data.setValue("Category 1", 43.2);
-//            data.setValue("Category 2", 27.9);
-//            data.setValue("Category 3", 79.5);
-//// create a chart...
-//            JFreeChart chart = ChartFactory.createPieChart("Sample Pie Chart", data, true, true, false);
-//
-//// create and display a frame...
-//            ChartFrame pieChart = new ChartFrame("First", chart);
-//            frame.pack();
-//            frame.setVisible(true);
+            DefaultPieDataset data = new DefaultPieDataset();
 
+            for (Account.Transaction index: transactionList) {
+                data.setValue(index.toString().substring(0, 20), index.getAmount());
+            }
 
+            JFreeChart chart = ChartFactory.createPieChart("Verteilung", data, true, true, false);
+            chart.getPlot().setBackgroundPaint(Color.white);
+
+            //ChartPanel chartPanel = new ChartPanel(chart, 320, 220, 150, 150, 300, 350, false, false, false, false, false, true);
+            ChartPanel chartPanel = new ChartPanel(chart);
 
             JScrollPane scrollPanelLeft = new JScrollPane(inputTextArea);
-            JPanel panelDiagramm = new JPanel();
-            JLabel headline = new JLabel("Verteilung");
 
-            headline.setFont(new Font("Arial Bold", Font.BOLD, 20));
-            panelDiagramm.add(headline);
+            JSplitPane innerSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, scrollPanelLeft, chartPanel);
+            innerSplitPane.setOneTouchExpandable(true);
+            innerSplitPane.setDividerSize(10);
+            innerSplitPane.setDividerLocation(500);
+            innerSplitPane.setResizeWeight(0.5);
+            //innerSplitPane.setDividerLocation(getWidth()/2);
 
-            JSplitPane splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, scrollPanelLeft, panelDiagramm);
-            splitPaneTop.setOneTouchExpandable(true);
-            splitPaneTop.setDividerSize(10);
-            splitPaneTop.setDividerLocation(475);
-            splitPaneTop.setResizeWeight(0.5);
-            //splitPaneTop.setDividerLocation(getWidth()/2);
-            this.add(splitPaneTop, BorderLayout.CENTER);
-        }
-    }
-
-
-    class bottomPanel extends JPanel {
-
-        public bottomPanel() {
-            this.setLayout(new BorderLayout());
 
             JLabel lblIban1 = new JLabel("IBAN: DE02100100100823464265");
             JLabel lblIban2 = new JLabel("IBAN: DE02200100100823464265");
@@ -128,62 +117,94 @@ public class GuiForm extends JFrame {
             JTextField txtFieldBalance3 = new JTextField(5);
 
             JLabel lblEuro11 = new JLabel("Euro");
+            JLabel lblEuro12 = new JLabel("Euro");
+            JLabel lblEuro13 = new JLabel("Euro");
+
+            JLabel lblDeposit1 = new JLabel("Einzahlung:");
+            JLabel lblDeposit2 = new JLabel("Einzahlung:");
+            JLabel lblDeposit3 = new JLabel("Einzahlung:");
+
+            JTextField txtFieldDeposit1 = new JTextField(15);
+            JTextField txtFieldDeposit2 = new JTextField(15);
+            JTextField txtFieldDeposit3 = new JTextField(15);
+
             JLabel lblEuro21 = new JLabel("Euro");
+            JLabel lblEuro22 = new JLabel("Euro");
+            JLabel lblEuro23 = new JLabel("Euro");
+
+            JLabel lblDisbursment1 = new JLabel("Auszahlung:");
+            JLabel lblDisbursment2 = new JLabel("Auszahlung:");
+            JLabel lblDisbursment3 = new JLabel("Auszahlung:");
+
+            JTextField txtFieldDisbursement1 = new JTextField(15);
+            JTextField txtFieldDisbursement2 = new JTextField(15);
+            JTextField txtFieldDisbursement3 = new JTextField(15);
+
             JLabel lblEuro31 = new JLabel("Euro");
+            JLabel lblEuro32 = new JLabel("Euro");
+            JLabel lblEuro33 = new JLabel("Euro");
 
-
-            JLabel lblDeposit = new JLabel("Einzahlung:");
-            JTextField txtFieldDeposit = new JTextField(15);
-            JLabel lblEuro2 = new JLabel("Euro");
-
-            JLabel lblDisbursment = new JLabel("Auszahlung:");
-            JTextField txtFieldDisbursement = new JTextField(15);
-            JLabel lblEuro3 = new JLabel("Euro");
 
             JPanel panelLeft = new JPanel();
+            //panelLeft.setLayout(new BoxLayout(panelLeft, BoxLayout.Y_AXIS));
+            panelLeft.setBorder(border);
+            panelLeft.setBackground(Color.WHITE);
             panelLeft.add(lblIban1);
-            panelLeft.add(lblBalance1);
-            panelLeft.add(txtFieldBalance1);
-            panelLeft.add(lblEuro11);
-            panelLeft.add(lblDeposit);
-            panelLeft.add(txtFieldDeposit);
-            panelLeft.add(lblEuro2);
-            panelLeft.add(lblDisbursment);
-            panelLeft.add(txtFieldDisbursement);
-            panelLeft.add(lblEuro3);
+//            panelLeft.add(lblBalance1);
+//            panelLeft.add(txtFieldBalance1);
+//            panelLeft.add(lblEuro11);
+//            panelLeft.add(lblDeposit1);
+//            panelLeft.add(txtFieldDeposit1);
+//            panelLeft.add(lblEuro12);
+//            panelLeft.add(lblDisbursment1);
+//            panelLeft.add(txtFieldDisbursement1);
+//            panelLeft.add(lblEuro13);
 
             JPanel panelCenter = new JPanel();
-
+            //panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
+            panelCenter.setBorder(border);
+            panelCenter.setBackground(Color.WHITE);
             panelCenter.add(lblIban2);
-            panelCenter.add(lblBalance2);
-            panelCenter.add(txtFieldBalance2);
-            panelLeft.add(lblEuro21, 1);
+//            panelCenter.add(lblBalance2);
+//            panelCenter.add(txtFieldBalance2);
+//            panelCenter.add(lblEuro21);
+//            panelCenter.add(lblDeposit2);
+//            panelCenter.add(txtFieldDeposit2);
+//            panelCenter.add(lblEuro22);
+//            panelCenter.add(lblDisbursment2);
+//            panelCenter.add(txtFieldDisbursement2);
+//            panelCenter.add(lblEuro23);
 
             JPanel panelRight = new JPanel();
-
+            //panelRight.setLayout(new BoxLayout(panelRight, BoxLayout.Y_AXIS));
+            panelRight.setBorder(border);
+            panelRight.setBackground(Color.WHITE);
             panelRight.add(lblIban3);
-            panelRight.add(lblBalance3,1);
-            panelRight.add(txtFieldBalance3,1);
-            panelLeft.add(lblEuro31, 1);
+//            panelRight.add(lblBalance3);
+//            panelRight.add(txtFieldBalance3);
+//            panelRight.add(lblEuro31);
+//            panelRight.add(lblDeposit3);
+//            panelRight.add(txtFieldDeposit3);
+//            panelRight.add(lblEuro32);
+//            panelRight.add(lblDisbursment3);
+//            panelRight.add(txtFieldDisbursement3);
+//            panelRight.add(lblEuro33);
 
 
             JPanel containerPanel = new JPanel();
-            containerPanel.setLayout(new GridLayout(0, 3));
+            containerPanel.setLayout(new BoxLayout(containerPanel, BoxLayout.X_AXIS));
             containerPanel.add(panelLeft);
             containerPanel.add(panelCenter);
             containerPanel.add(panelRight);
 
 
-            JPanel dummy = new JPanel();
+            JSplitPane outerSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, innerSplitPane, containerPanel);
+            outerSplitPane.setOneTouchExpandable(true);
+            outerSplitPane.setDividerSize(8);
+            outerSplitPane.setDividerLocation(330);
+            outerSplitPane.setResizeWeight(0);
 
-            JSplitPane splitPaneBottom = new JSplitPane(JSplitPane.VERTICAL_SPLIT, true, new JPanel(), containerPanel);
-            splitPaneBottom.setOneTouchExpandable(true);
-            splitPaneBottom.setDividerSize(8);
-            splitPaneBottom.setDividerLocation(0);
-            splitPaneBottom.setResizeWeight(0);
-
-            this.add(splitPaneBottom, BorderLayout.CENTER);
-
+            this.add(outerSplitPane, BorderLayout.CENTER);
         }
     }
 
@@ -193,7 +214,7 @@ public class GuiForm extends JFrame {
             //  com.sun.java.swing.plaf.motif.MotifLookAndFeel
             //  com.sun.java.swing.plaf.windows.WindowsLookAndFeel
             //  com.sun.java.swing.plaf.gtk.GTKLookAndFeel
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
         } catch (UnsupportedLookAndFeelException ex) {
             ex.printStackTrace();
         } catch (IllegalAccessException ex) {

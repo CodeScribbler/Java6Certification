@@ -117,6 +117,8 @@ public class Account {
      */
     public class Transaction {
 
+        private String iban;
+
         private String timestamp;
 
         private TransactionType transType;
@@ -125,6 +127,8 @@ public class Account {
 
         private double amount;
 
+
+        public String getIban() { return iban; }
 
         public String getTimestamp() {
             return timestamp;
@@ -144,10 +148,11 @@ public class Account {
 
         @Override
         public String toString() {
-            return Account.this.accountNumber + ";"+  this.timestamp + ";" + ((this.transType == TransactionType.DESPOSIT) ? "Einzahlung;" : "Auszahlung;" ) + this.description + ";" + this.amount;
+            return "IBAN " + this.iban + ";"+  this.timestamp + ";" + ((this.transType == TransactionType.DESPOSIT) ? "Einzahlung;" : "Auszahlung;" ) + this.description + ";" + this.amount;
         }
 
-        public Transaction(String timestamp, TransactionType transType, double amount, String description) {
+        public Transaction(String iban, String timestamp, TransactionType transType, double amount, String description) {
+            this.iban = iban;
             this.timestamp = timestamp;
             this.transType = transType;
             this.amount = amount;

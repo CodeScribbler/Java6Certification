@@ -91,15 +91,15 @@ public class Bank {
 
         List<Account> accountList = new ArrayList<Account>();
         for (Customer index : customerList) {
-            index.addAccount(new Account(IBANGenerator.getInstance().getNumber(), 10000));
+            index.addAccount(new Account(IBANGenerator.getInstance().getNumber(), 5000));
             accountList.addAll(index.getAccounts());
         }
         for (Account index :accountList) {
-            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DESPOSIT, 5000, "Urlaubsgeld Juni"));
-            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 700, "Party July"));
-            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DESPOSIT, 3800, "Gehaltseingang Oktober"));
-            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 800, "Miete Oktober"));
-            index.addTransaction(index.new Transaction(Utility.getDate(null), TransactionType.DISBURSEMENT, 200, "Amazon"));
+            index.addTransaction(index.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), TransactionType.DESPOSIT, 5000, "Urlaubsgeld Juni"));
+            index.addTransaction(index.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), TransactionType.DISBURSEMENT, 700, "Party July"));
+            index.addTransaction(index.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), TransactionType.DESPOSIT, 3800, "Gehaltseingang Oktober"));
+            index.addTransaction(index.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), TransactionType.DISBURSEMENT, 800, "Miete Oktober"));
+            index.addTransaction(index.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), TransactionType.DISBURSEMENT, 200, "Amazon"));
         }
 
     }
@@ -239,21 +239,21 @@ public class Bank {
             }
             return true;
         } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         } finally {
             if (fWriter != null) try {
                 fWriter.close();
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                ExceptionDialog.showDialog(e, null);
             }
         }
         return false;
     }
 
 
-    public void readCsvFile(Bank bank, String path) {
+    public boolean readCsvFile(Bank bank, String path) {
         File file = new File(path);
 
         if (file.exists()) {
@@ -279,7 +279,7 @@ public class Bank {
 
                                 if (Utility.checkDateFormat(tokens[TIMESTAMP], true)) {
                                     Account acc = new Account();
-                                    Transaction transaction = acc.new Transaction(Utility.getDate(tokens[TIMESTAMP]),
+                                    Transaction transaction = acc.new Transaction(tokens[IBAN], Utility.getDate(tokens[TIMESTAMP]),
                                             ((tokens[TRANSACTIONTYPE]).equalsIgnoreCase("Einzahlen") ? TransactionType.DESPOSIT : TransactionType.DISBURSEMENT),
                                             Double.parseDouble(tokens[AMOUNT]),
                                             tokens[DESCRIPTION]);
@@ -291,11 +291,11 @@ public class Bank {
                     }
                 }
             } catch (FileNotFoundException e) {
-                System.err.println(e.getMessage());
+                ExceptionDialog.showDialog(e, null);
             } catch (IOException e) {
-                System.err.println(e.getMessage());
+                ExceptionDialog.showDialog(e, null);
             }
-        } else System.err.println("\n No file are exist!\n");
+        } return false;
     }
 
 

@@ -466,7 +466,7 @@ final class Input {
                 description = Utility.readString(" Eingabe Bescheibung: ");
             } while (!checkInput());
 
-            if (account.addTransaction(account.new Transaction(Utility.getDate(null), transType, amount, description))) {
+            if (account.addTransaction(account.new Transaction(IBANGenerator.getInstance().getNumber(), Utility.getDate(null), transType, amount, description))) {
                 System.out.println("\n Die Transanktion wurde erfogrich ausgeführt!\n\n");
                 return;
             }

@@ -17,13 +17,15 @@ public class Utility {
     public static String readString(String prompt) {
         System.out.print(prompt);
         try {
+
             return new java.util.Scanner(System.in).nextLine();
+
         }
         catch (NoSuchElementException e) {
-            System.err.println(" Ungültige Eingabe!");
+            ExceptionDialog.showDialog(e, null);
         }
         catch (IllegalArgumentException e) {
-            System.err.println(" Ungültige Eingabe!");
+            ExceptionDialog.showDialog(e, null);
         }
         return null;
     }
@@ -39,13 +41,13 @@ public class Utility {
 
         }
         catch (InputMismatchException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         catch (NoSuchElementException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         return -1;
     }
@@ -60,11 +62,11 @@ public class Utility {
             return new java.util.Scanner(System.in).nextInt();
 
         } catch (InputMismatchException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         } catch (NoSuchElementException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         return -1;
     }
@@ -75,16 +77,18 @@ public class Utility {
     public static double readDouble(String prompt) {
         System.out.print(prompt);
         try {
+
             return new java.util.Scanner(System.in).nextDouble();
+
         }
         catch (InputMismatchException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         catch (NoSuchElementException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
+            ExceptionDialog.showDialog(e, null);
         }
         return -1;
     }
@@ -125,7 +129,8 @@ public class Utility {
             dateFormat.format(date);
             return true;
         } catch (ParseException e) {
-            System.err.println(" Das Eingelesende Datum (" + dateString + ") ist falsch Formatiert!");
+            String str = "Das Eingelesende Datum (" + dateString + ") ist falsch Formatiert!";
+            ExceptionDialog.showDialog(e, str);
         }
         return false;
     }
