@@ -67,10 +67,9 @@ public class GuiForm extends JFrame {
         public bankPanel() {
             JTextArea inputTextArea = new JTextArea();
             List<Account.Transaction> transactionList = new ArrayList<Account.Transaction>();
+            Border border = new BevelBorder(BevelBorder.RAISED, Color.gray, Color.gray);
 
             this.setLayout(new BorderLayout());
-
-            Border border = new BevelBorder(BevelBorder.RAISED, Color.gray, Color.gray);
             this.setBorder(border);
 
             for (Account index : accountList)
@@ -112,9 +111,9 @@ public class GuiForm extends JFrame {
             JLabel lblBalance2 = new JLabel("Kontostand:");
             JLabel lblBalance3 = new JLabel("Kontostand:");
 
-            JTextField txtFieldBalance1 = new JTextField(5);
-            JTextField txtFieldBalance2 = new JTextField(5);
-            JTextField txtFieldBalance3 = new JTextField(5);
+            JTextField txtFieldBalance1 = new JTextField(15);
+            JTextField txtFieldBalance2 = new JTextField(15);
+            JTextField txtFieldBalance3 = new JTextField(15);
 
             JLabel lblEuro11 = new JLabel("Euro");
             JLabel lblEuro12 = new JLabel("Euro");
