@@ -74,6 +74,25 @@ public class Utility {
     /**
      *
      */
+    public static long readLong(String prompt) {
+        System.out.print(prompt);
+        try {
+
+            return new java.util.Scanner(System.in).nextLong();
+
+        } catch (InputMismatchException e) {
+            ExceptionDialog.showDialog(e, null);
+        } catch (NoSuchElementException e) {
+            ExceptionDialog.showDialog(e, null);
+        } catch (IllegalArgumentException e) {
+            ExceptionDialog.showDialog(e, null);
+        }
+        return -1;
+    }
+
+    /**
+     *
+     */
     public static double readDouble(String prompt) {
         System.out.print(prompt);
         try {
@@ -108,7 +127,6 @@ public class Utility {
         }
         else
             return dfsdf.format(new Date());
-
     }
 
     /**

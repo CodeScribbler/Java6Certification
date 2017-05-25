@@ -257,7 +257,6 @@ final class Input {
 
     private static final Pattern VALID_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[d][e]$", Pattern.CASE_INSENSITIVE);
 
-
     /**
      * @param bank
      * @param option
@@ -309,86 +308,88 @@ final class Input {
      * @param bank
      */
     protected static void createBuisnessCustomer(Bank bank) {
+        String companyName, contactFirstname, contactLastname, address, email, contactPhoneNumber, phoneNumber;
+
         System.out.println("\n - Buisness Kundenanlegung wird initialisiert - \n");
 
-        String companyName;
         do {
             companyName = Utility.readString("\n Eingabe Firmenname: ");
-        } while (!checkInput());
+        } while (companyName == null || !checkInput());
 
-        String contactFirstname;
         do {
             contactFirstname = Utility.readString("\n Eingabe Ansprechpartner-Vorname: ");
-        } while (!checkInput());
+        } while (contactFirstname == null || !checkInput());
 
-        String contactLastname;
         do {
             contactLastname = Utility.readString("\n Eingabe Ansprechpartner-Nachname: ");
-        } while (!checkInput());
+        } while (contactLastname == null || !checkInput());
 
-        String contactPhoneNumber;
         do {
             contactPhoneNumber = Utility.readString("\n Eingabe Telefonnummer: ");
-        } while (!checkInput());
+            if ((Pattern.matches("[a-zA-Z]*", contactPhoneNumber))) {
+                System.err.println("\n Fehlerhafte Benutzereingabe!");
+                contactPhoneNumber = null;
+            }
+        } while (contactPhoneNumber == null || !checkInput());
 
-        String address;
         do {
             address = Utility.readString("\n Eingabe Adresse: ");
-        } while (!checkInput());
+        } while (address == null || !checkInput());
 
-        String phoneNumber;
         do {
             phoneNumber = Utility.readString("\n Geben Sie bitte die Telefonnummer ein: ");
-        } while (!checkInput());
+            if ((Pattern.matches("[a-zA-Z]*", phoneNumber))) {
+                System.err.println("\n Fehlerhafte Benutzereingabe!");
+                phoneNumber = null;
+            }
+        } while (phoneNumber == null || !checkInput());
 
-        String email;
         do {
             email = validateEmail("\n Eingabe E-Mail Adresse: ");
-            if (email == null) {
-                System.out.println(" Ungültige E-Mail-Adresse!\n");
-            }
+            if (email == null)
+                System.err.println(" Ungültige E-Mail-Adresse!\n");
         } while (email == null || !checkInput());
 
         if (bank.addCustomer(new BusinessCustomer(address, phoneNumber, CustomerTyp.BUSINESSCUSTOMER, email, companyName, new Counterpart(contactFirstname, contactLastname, contactPhoneNumber)))) {
             System.out.println("\n\n Der Firmenkunde wurde erfolgreich angelegt!\n\n");
         } else {
-            System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
+            System.err.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
         }
-
     }
 
     /**
      * @param bank
      */
     protected static void createPrivateCustomer(Bank bank) {
-        String birthdate = null;
+        String birthdate, firstname, lastname, address, phoneNumber, email;
+
         System.out.println("\n - Private Kundenanlegung wird initialisiert - \n");
 
-        String firstname;
         do {
             firstname = Utility.readString("\n Eingabe Vorname: ");
-        } while (!checkInput());
+        } while (firstname == null || !checkInput());
 
-        String lastname;
         do {
             lastname = Utility.readString("\n Eingabe Nachname: ");
-        } while (!checkInput());
+        } while (lastname == null || !checkInput());
 
-        String address;
         do {
             address = Utility.readString("\n Eingabe Adresse: ");
-        } while (!checkInput());
+        } while (address == null || !checkInput());
 
-        String phoneNumber;
         do {
             phoneNumber = Utility.readString("\n Eingabe Telefonnummer: ");
-        } while (!checkInput());
+            if ((Pattern.matches("[a-zA-Z]*", phoneNumber))) {
+                System.err.println("\n Fehlerhafte Benutzereingabe!");
+                phoneNumber = null;
+            }
 
-        String email;
+        } while (phoneNumber == null || !checkInput());
+
         do {
             email = validateEmail("\n Eingabe E-Mail Adresse: ");
             if (email == null) {
-                System.out.println(" Ungültige E-Mail Adresse!\n");
+                System.err.println(" Ungültige E-Mail Adresse!\n");
             }
         } while (email == null || !checkInput());
 
@@ -400,7 +401,7 @@ final class Input {
         if (bank.addCustomer(new PrivateCustomer(address, phoneNumber, CustomerTyp.PRIVATECUSTOMER, email, firstname, lastname, birthdate))) {
             System.out.println("\n\n Der Privatkunde wurde erfolgreich angelegt!\n\n");
         } else {
-            System.out.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
+            System.err.println("\n\n Die Kundenanlegung wurde vom Benutzer abgebrochen!\n\n");
         }
 
     }
@@ -409,12 +410,13 @@ final class Input {
      * @param bank
      */
     protected static void createAccount(Bank bank) {
+        double accountBalance;
+
         System.out.println("\n - Kontoanlegung wird initialisiert - \n");
 
-        double accountBalance;
         do {
             accountBalance = Utility.readDouble(" Geben Sie bitte den Kontostand ein: ");
-        } while (!checkInput());
+        } while (accountBalance == -1 || !checkInput());
 
         Account acc = new Account(IBANGenerator.getInstance().getNumber(), accountBalance);
         Output.printPrivateCustomer(bank.getSortedCustomerList(false));
@@ -425,7 +427,7 @@ final class Input {
         if (bank.setAccount(choice, acc)) {
             System.out.println("\n Das Konto wurde erfolgreich angelegt und zugeordnet!\n" + " Zugeteilte IBAN: " + acc.getAccountNumber() + " \n\n");
         } else {
-            System.out.println("\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
+            System.err.println("\n Die Kontoanlegung wurde vom Benutzer abgebrochen!\n\n");
         }
     }
 
@@ -435,8 +437,9 @@ final class Input {
      * @param transType
      */
     protected static void createTransaction(Bank bank, String title, TransactionType transType) {
-        System.out.println("\n ----- " + title + " ----- \n");
         String iban = null;
+
+        System.out.println("\n ----- " + title + " ----- \n");
 
         do {
             try {
@@ -483,7 +486,12 @@ final class Input {
         return input != null && input.equalsIgnoreCase("j") || input != null && input.equalsIgnoreCase("ja");
     }
 
-
+    /**
+     *
+     * @param bank
+     * @param options
+     * @return
+     */
     protected static String readCsvInfo(Bank bank, String[] options) {
         String path;
         int chioce;
@@ -494,8 +502,6 @@ final class Input {
             for (Account index : accountList) {
                 if (index.getTransListSize() > 0)
                     System.out.println(" Da ist etwas!");
-
-
             }
         }
 

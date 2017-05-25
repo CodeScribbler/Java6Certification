@@ -5,19 +5,10 @@ public class Counterpart {
 
     // Attributes
 
-    /**
-     *
-     */
     private String firstName;
 
-    /**
-     *
-     */
     private String lastname;
 
-    /**
-     *
-     */
     private String phoneNumber;
 
 
